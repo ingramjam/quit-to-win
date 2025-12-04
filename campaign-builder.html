@@ -22,6 +22,8 @@
         body { 
             font-family: 'Inter', sans-serif; 
             overflow-x: hidden;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            transition: background 0.5s ease;
         }
         h1, h2, h3, .font-display { font-family: 'Space Grotesk', sans-serif; }
 
@@ -81,6 +83,28 @@
         .tab-active {
             border-bottom: 3px solid;
             border-image: linear-gradient(90deg, #0ea5e9 0%, #ec4899 100%) 1;
+        }
+
+        /* Freedom Theme (Airy, Electric, Sky) */
+        .theme-freedom {
+            --bg-primary: #f0f9ff;
+            --bg-secondary: #e0f2fe;
+            --accent-main: #0ea5e9;
+            --accent-glow: #38bdf8;
+            --text-main: #0c4a6e;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --btn-grad: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+        }
+
+        /* Resolution Theme (Bold, energetic, Gold/Dark) */
+        .theme-resolution {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-main: #fbbf24;
+            --accent-glow: #f59e0b;
+            --text-main: #f1f5f9;
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --btn-grad: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
         }
 
         /* Supportive Theme (Calming, Teal, Organic) */
