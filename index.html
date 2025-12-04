@@ -16,7 +16,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700;900&family=Share+Tech+Mono&family=Comic+Sans+MS&display=swap" rel="stylesheet">
+    
+    <!-- html2canvas for image capture -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <style>
         /* Base Fonts */
@@ -59,30 +62,59 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
         .theme-adult { 
-            background: linear-gradient(-45deg, #ff00cc, #3333ff, #ffcc00, #ff3300);
+            background: linear-gradient(-45deg, #ff00cc, #3333ff, #00ffff, #ff3300);
             background-size: 400% 400%;
             animation: gradient-x 10s ease infinite;
             color: #000;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
         }
         .card-adult { 
             background: #ffffff; 
             border: 6px solid #000000; 
             box-shadow: 8px 8px 0px #ff00cc; 
+            position: relative;
+        }
+        .card-adult::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.1) 10px,
+                rgba(0,0,0,0.1) 11px
+            );
+            pointer-events: none;
+            z-index: 1;
         }
         .btn-adult { 
             background-color: #000000; 
-            color: #ffffff; 
-            border: 3px solid #fbbf24; 
-            box-shadow: 4px 4px 0px #ff00cc;
+            color: #ffff00; 
+            border: 3px solid #ff00cc; 
+            box-shadow: 4px 4px 0px #00ffff;
             font-weight: 900;
             text-transform: uppercase;
+            font-family: 'Comic Sans MS', cursive;
         }
         .btn-adult:hover { 
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px #ff00cc;
+            box-shadow: 2px 2px 0px #00ffff;
+            animation: blink 0.5s ease infinite;
         }
-        .accent-adult { color: #000000; font-weight: 900; }
+        .accent-adult { 
+            color: #ff00cc; 
+            font-weight: 900;
+            text-shadow: 2px 2px 0px #00ffff;
+        }
 
         /* --- SENIOR THEME: Corporate Healthcare --- */
         .theme-senior { 
@@ -305,10 +337,52 @@
                 themeKey === 'adult' ? 'bg-yellow-400' : 
                 'bg-[#0369a1]';
 
-            const handleCopy = () => {
-                const text = `I just calculated that quitting ${PRODUCT_LABELS[product]} saves me $${yearlySavings.toLocaleString()} a year! That's enough for ${currentProductData.item} ${currentProductData.emoji}. Check your stats here:`;
-                navigator.clipboard.writeText(text);
-                alert("Postcard text copied to clipboard! Share it with a friend.");
+            const handleCopy = async () => {
+                const postcardElement = document.getElementById('postcard');
+                if (!postcardElement) return;
+                
+                try {
+                    // Capture the card as canvas
+                    const canvas = await html2canvas(postcardElement, {
+                        backgroundColor: null,
+                        scale: 2,
+                        logging: false,
+                        useCORS: true
+                    });
+                    
+                    // Convert to blob
+                    canvas.toBlob(async (blob) => {
+                        // Try native share API first (mobile)
+                        if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'quit-to-win.png', { type: 'image/png' })] })) {
+                            const file = new File([blob], 'quit-to-win-card.png', { type: 'image/png' });
+                            try {
+                                await navigator.share({
+                                    files: [file],
+                                    title: 'My Quit to Win Results',
+                                    text: `I'm saving $${yearlySavings.toLocaleString()} a year by quitting ${PRODUCT_LABELS[product]}!`
+                                });
+                            } catch (err) {
+                                if (err.name !== 'AbortError') {
+                                    downloadImage(canvas);
+                                }
+                            }
+                        } else {
+                            // Fallback: download the image
+                            downloadImage(canvas);
+                        }
+                    }, 'image/png');
+                } catch (error) {
+                    console.error('Error capturing card:', error);
+                    alert('Error capturing image. Please try again.');
+                }
+            };
+
+            const downloadImage = (canvas) => {
+                const link = document.createElement('a');
+                link.download = 'quit-to-win-card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                alert('Card image downloaded! Share it on social media.');
             };
 
             return (
@@ -467,7 +541,7 @@
                             </h2>
 
                             {/* THE POSTCARD */}
-                            <div className={`relative w-full max-w-md aspect-[4/5] p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group ${themeKey === 'senior' ? 'rounded-2xl' : ''}`}>
+                            <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group ${themeKey === 'senior' ? 'rounded-2xl' : ''}`}>
                                 
                                 <div>
                                     <div className="flex justify-between items-start mb-8">
@@ -481,20 +555,24 @@
                                     </div>
                                     
                                     <div className={`space-y-2 ${themeKey === 'adult' ? 'font-black uppercase italic' : 'font-bold'}`}>
-                                        <h3 className="text-3xl leading-tight opacity-50">
+                                        <h3 className="text-2xl md:text-3xl leading-tight opacity-50">
                                             I'm trading <br/>
                                             <span className="strike-through decoration-red-500 decoration-4">{PRODUCT_LABELS[product]}</span>
                                         </h3>
-                                        <h3 className={`text-4xl leading-tight ${textAccent}`}>
+                                        <h3 className={`text-3xl md:text-4xl leading-tight ${textAccent}`}>
                                             for {currentProductData.item}
                                         </h3>
                                     </div>
 
                                     <p className={`mt-6 text-sm opacity-80 leading-relaxed ${themeKey === 'teen' ? 'font-tech' : ''}`}>
-                                        By quitting now, I save <span className="font-bold border-b-2 border-current">${Math.round(yearlySavings).toLocaleString()}</span> this year alone. 
-                                        {daysToGoal < 365 ? 
-                                            ` I can afford this goal in just ${daysToGoal} days.` : 
-                                            ` That's a huge step toward financial freedom.`}
+                                        By quitting now, I save{' '}
+                                        <span className="font-bold border-b-2 border-current whitespace-nowrap">${Math.round(yearlySavings).toLocaleString()}</span>
+                                        {' '}this year alone.
+                                        {daysToGoal < 365 ? (
+                                            <> I can afford this goal in just {daysToGoal} days.</>
+                                        ) : (
+                                            <> That's a huge step toward financial freedom.</>
+                                        )}
                                     </p>
                                 </div>
 
@@ -518,10 +596,14 @@
                                         className={`px-8 py-4 font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform ${btnClass}`}
                                     >
                                         <IconShare className="w-5 h-5" />
-                                        Copy & Share
+                                        Share Image
                                     </button>
                                 </div>
                             </div>
+                            
+                            <p className="mt-6 text-sm opacity-50 text-center">
+                                Hover card to share your win
+                            </p>
                         </div>
                     </main>
 
