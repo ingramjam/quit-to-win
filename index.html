@@ -33,44 +33,153 @@
         }
         .animate-float { animation: float 6s ease-in-out infinite; }
         
-        /* Theme Gradients */
-        .theme-teen { background: linear-gradient(135deg, #111827 0%, #000000 100%); color: #4ade80; }
-        .theme-adult { background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); color: #1e3a8a; }
-        .theme-senior { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fbbf24; }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px currentColor; }
+            50% { box-shadow: 0 0 40px currentColor; }
+        }
+        
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(-10%, 5%); }
+            30% { transform: translate(5%, -10%); }
+            40% { transform: translate(-5%, 15%); }
+            50% { transform: translate(-10%, 5%); }
+            60% { transform: translate(15%, 0); }
+            70% { transform: translate(0, 10%); }
+            80% { transform: translate(-15%, 0); }
+            90% { transform: translate(10%, 5%); }
+        }
+        
+        /* Texture overlays */
+        .texture-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.03) 2px, rgba(255,255,255,.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,.03) 2px, rgba(255,255,255,.03) 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .grain::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            right: -50%;
+            bottom: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>');
+            opacity: 0.4;
+            pointer-events: none;
+            animation: grain 8s steps(10) infinite;
+            z-index: 0;
+        }
+        
+        /* Theme Gradients - More vibrant */
+        .theme-teen { 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #4ade80;
+        }
+        .theme-adult { 
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #dbeafe 100%);
+            color: #1e40af;
+        }
+        .theme-senior { 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+            color: #fbbf24;
+        }
 
-        .card-teen { background: #1f2937; border: 2px solid #4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.2); }
-        .card-adult { background: #ffffff; border: 1px solid #bfdbfe; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1); }
-        .card-senior { background: #1e293b; border: 1px solid #fbbf24; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.15); }
+        .card-teen { 
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border: 3px solid #4ade80;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.3), inset 0 0 60px rgba(74, 222, 128, 0.05);
+        }
+        .card-adult { 
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            border: 2px solid #3b82f6;
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.2), inset 0 0 60px rgba(59, 130, 246, 0.03);
+        }
+        .card-senior { 
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 3px solid #fbbf24;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3), inset 0 0 60px rgba(251, 191, 36, 0.05);
+        }
         
         .accent-teen { color: #4ade80; }
         .accent-adult { color: #2563eb; }
         .accent-senior { color: #fbbf24; }
 
-        .btn-teen { background-color: #4ade80; color: #000; }
-        .btn-teen:hover { background-color: #22c55e; }
+        .btn-teen { 
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(74, 222, 128, 0.4);
+        }
+        .btn-teen:hover { 
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            box-shadow: 0 6px 30px rgba(74, 222, 128, 0.6);
+        }
         
-        .btn-adult { background-color: #2563eb; color: #fff; }
-        .btn-adult:hover { background-color: #1d4ed8; }
+        .btn-adult { 
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        }
+        .btn-adult:hover { 
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 6px 30px rgba(59, 130, 246, 0.6);
+        }
         
-        .btn-senior { background-color: #fbbf24; color: #0f172a; }
-        .btn-senior:hover { background-color: #f59e0b; }
+        .btn-senior { 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+        }
+        .btn-senior:hover { 
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 6px 30px rgba(251, 191, 36, 0.6);
+        }
+        
+        /* Floating CTA */
+        .floating-cta {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .floating-cta {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+        }
 
         /* Range Input Styling */
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
+            height: 24px;
+            width: 24px;
             border-radius: 50%;
             background: currentColor;
             cursor: pointer;
-            margin-top: -8px;
+            margin-top: -10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
-            height: 4px;
+            height: 6px;
             cursor: pointer;
             background: #e5e7eb;
-            border-radius: 2px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -162,6 +271,29 @@
                     <line x1="20" y1="110" x2="50" y2="115" stroke="#e0e0e0" strokeWidth="0.5" opacity="0.6"/>
                     <line x1="20" y1="140" x2="50" y2="145" stroke="#e0e0e0" strokeWidth="0.5" opacity="0.6"/>
                 </g>
+            </svg>
+        );
+        
+        const IconPouch = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="200" viewBox="0 0 60 200" className={className} style={{transform: 'scale(0.6)'}}>
+                {/* Can body */}
+                <rect x="8" y="40" width="44" height="120" rx="2" fill="currentColor" opacity="0.3" stroke="currentColor" strokeWidth="2"/>
+                {/* Can top lid */}
+                <ellipse cx="30" cy="40" rx="22" ry="8" fill="currentColor" opacity="0.5"/>
+                <ellipse cx="30" cy="40" rx="18" ry="6" fill="currentColor" opacity="0.3"/>
+                {/* Can bottom */}
+                <ellipse cx="30" cy="160" rx="22" ry="8" fill="currentColor" opacity="0.4"/>
+                {/* Label area */}
+                <rect x="10" y="70" width="40" height="60" fill="currentColor" opacity="0.2" rx="1"/>
+                {/* Brand marking lines */}
+                <line x1="15" y1="85" x2="45" y2="85" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+                <line x1="15" y1="95" x2="45" y2="95" stroke="currentColor" strokeWidth="3" opacity="0.7"/>
+                <line x1="15" y1="105" x2="45" y2="105" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+                {/* Shine effect */}
+                <rect x="12" y="50" width="3" height="80" fill="#fff" opacity="0.3" rx="1"/>
+                <circle cx="30" cy="100" r="2" fill="currentColor" opacity="0.8">
+                    <animate attributeName="opacity" values="0.5;0.9;0.5" dur="2s" repeatCount="indefinite"/>
+                </circle>
             </svg>
         );
 
@@ -284,7 +416,7 @@
             };
 
             return (
-                <div className={`min-h-screen transition-colors duration-700 ${currentData.theme === 'adult' ? 'bg-slate-50 text-slate-900' : currentData.theme === 'teen' ? 'bg-gray-900 text-gray-100' : 'bg-slate-900 text-slate-200'}`}>
+                <div className={`min-h-screen transition-colors duration-700 grain relative ${currentData.theme === 'adult' ? 'bg-slate-50 text-slate-900' : currentData.theme === 'teen' ? 'bg-gray-900 text-gray-100' : 'bg-slate-900 text-slate-200'}`}>
                     
                     {/* Navigation / Header */}
                     <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
@@ -310,15 +442,15 @@
                     </nav>
 
                     {/* Hero Section */}
-                    <header className="max-w-4xl mx-auto text-center mt-12 px-4">
-                        <span className={`inline-block py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border ${currentData.theme === 'teen' ? 'border-green-500/30 text-green-400' : currentData.theme === 'adult' ? 'border-blue-500/30 text-blue-600' : 'border-amber-500/30 text-amber-400'}`}>
+                    <header className="max-w-4xl mx-auto text-center mt-12 px-4 relative z-10">
+                        <span className={`inline-block py-2 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border-2 ${currentData.theme === 'teen' ? 'border-green-500 text-green-400 bg-green-500/10' : currentData.theme === 'adult' ? 'border-blue-500 text-blue-600 bg-blue-500/10' : 'border-amber-500 text-amber-400 bg-amber-500/10'}`}>
                             {currentData.label}
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                        <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight drop-shadow-lg">
                             Your habit costs <br/>
-                            <span className={textAccent}>more than money.</span>
+                            <span className={`${textAccent} drop-shadow-[0_0_30px_currentColor]`}>more than money.</span>
                         </h1>
-                        <p className="text-xl opacity-80 max-w-2xl mx-auto mb-10">
+                        <p className="text-xl opacity-90 max-w-2xl mx-auto mb-10 drop-shadow">
                             {currentData.tagline}
                         </p>
 
@@ -328,13 +460,32 @@
                                 <button
                                     key={key}
                                     onClick={() => setProduct(key)}
-                                    className={`px-6 py-3 rounded-xl border-2 font-medium transition-all ${product === key ? `${btnClass} border-transparent shadow-lg transform scale-105` : `border-gray-700 bg-transparent hover:border-gray-500 opacity-60`}`}
+                                    className={`px-6 py-3 rounded-xl border-2 font-semibold transition-all relative overflow-hidden ${product === key ? `${btnClass} border-transparent shadow-2xl transform scale-105` : `border-gray-600 bg-transparent hover:border-gray-400 opacity-50 hover:opacity-75`}`}
                                 >
-                                    {label}
+                                    {product === key && <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></span>}
+                                    <span className="relative z-10">{label}</span>
                                 </button>
                             ))}
                         </div>
                     </header>
+
+                    {/* Product Icons Section */}
+                    <section className="max-w-5xl mx-auto px-4 mb-16 relative z-10">
+                        <div className="flex justify-center items-center gap-8 md:gap-16 py-8">
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'vape' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('vape')}>
+                                <IconVape className="w-16 h-32" />
+                            </div>
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'cigs' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('cigs')}>
+                                <IconCigarette className="w-16 h-32" />
+                            </div>
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'weed' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('weed')}>
+                                <IconJoint className="w-16 h-32" />
+                            </div>
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'pouch' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('pouch')}>
+                                <IconPouch className="w-16 h-32" />
+                            </div>
+                        </div>
+                    </section>
 
                     {/* Main Grid */}
                     <main className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 pb-12">
@@ -473,47 +624,32 @@
                         </div>
                     </main>
 
-                    {/* Product Icons Section */}
-                    <section className="max-w-4xl mx-auto px-4 mb-12">
-                        <div className="flex justify-center items-center gap-12 md:gap-20 py-8">
-                            <div className={`transition-all duration-500 ${product === 'vape' ? `${textAccent} scale-125 opacity-100` : 'opacity-20 scale-90'}`}>
-                                <IconVape className="w-12 h-24" />
-                            </div>
-                            <div className={`transition-all duration-500 ${product === 'cigs' ? `${textAccent} scale-125 opacity-100` : 'opacity-20 scale-90'}`}>
-                                <IconCigarette className="w-12 h-24" />
-                            </div>
-                            <div className={`transition-all duration-500 ${product === 'weed' ? `${textAccent} scale-125 opacity-100` : 'opacity-20 scale-90'}`}>
-                                <IconJoint className="w-12 h-24" />
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* CTA Section */}
-                    <section className="max-w-4xl mx-auto px-4 mb-20">
-                        <div className={`p-8 md:p-12 rounded-3xl text-center border transition-colors duration-500 ${currentData.theme === 'adult' ? 'bg-blue-50 border-blue-100' : 'bg-white/5 border-white/10'}`}>
-                            <div className="flex justify-center mb-6">
+                    {/* Floating CTA */}
+                    <div className="floating-cta">
+                        <div className={`p-6 rounded-2xl text-center shadow-2xl border backdrop-blur-sm transition-colors duration-500 ${currentData.theme === 'adult' ? 'bg-blue-50/95 border-blue-200' : 'bg-gray-900/95 border-white/20'}`}>
+                            <div className="flex justify-center mb-3">
                                 <img 
                                     src="https://kicform.org/hs-fs/hubfs/kic%20logo2.png?width=118&height=40&name=kic%20logo2.png" 
                                     alt="Kick It California Logo" 
-                                    className="h-12 object-contain"
+                                    className="h-8 object-contain"
                                 />
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                                Ready to make this real?
-                            </h2>
-                            <p className="text-lg opacity-80 mb-8 max-w-xl mx-auto">
-                                You've done the math. Now take the first step. Kick It California provides free, personalized support to help you quit for good.
+                            <h3 className="text-xl font-bold mb-2">
+                                Ready to quit?
+                            </h3>
+                            <p className="text-sm opacity-80 mb-4 max-w-xs">
+                                Get free, personalized support now.
                             </p>
                             <a 
                                 href="https://kicform.org/kick-it-2" 
                                 target="_blank"
-                                className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-bold transition-transform hover:scale-105 ${btnClass}`}
+                                className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-transform hover:scale-105 ${btnClass}`}
                             >
                                 Kick It Now
-                                <IconArrowRight className="w-5 h-5" />
+                                <IconArrowRight className="w-4 h-4" />
                             </a>
                         </div>
-                    </section>
+                    </div>
 
                     {/* Footer */}
                     <footer className={`py-12 text-center border-t ${currentData.theme === 'adult' ? 'border-gray-200' : 'border-gray-800'}`}>
