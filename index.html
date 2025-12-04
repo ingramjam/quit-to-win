@@ -15,6 +15,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- html2canvas for card capture -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
@@ -231,11 +234,53 @@
             const daysToGoal = Math.ceil(goalPrice / dailyCost);
             const progress = Math.min((yearlySavings / goalPrice) * 100, 100);
 
-            // Copy Handler
-            const handleCopy = () => {
-                const text = `I just calculated that quitting ${PRODUCT_LABELS[product]} saves me $${yearlySavings.toLocaleString()} a year! That's enough for ${currentProductData.item} ${currentProductData.emoji}. Check your stats here:`;
-                navigator.clipboard.writeText(text);
-                alert("Postcard text copied to clipboard! Share it with a friend.");
+            // Share Handler - Captures postcard as image
+            const handleShare = async () => {
+                const postcardElement = document.getElementById('postcard');
+                if (!postcardElement) return;
+                
+                try {
+                    // Capture the card as canvas
+                    const canvas = await html2canvas(postcardElement, {
+                        backgroundColor: null,
+                        scale: 2, // Higher quality
+                        logging: false,
+                        useCORS: true
+                    });
+                    
+                    // Convert to blob
+                    canvas.toBlob(async (blob) => {
+                        // Try native share API first (mobile)
+                        if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'quit-to-win.png', { type: 'image/png' })] })) {
+                            const file = new File([blob], 'quit-to-win-card.png', { type: 'image/png' });
+                            try {
+                                await navigator.share({
+                                    files: [file],
+                                    title: 'My Quit to Win Results',
+                                    text: `I'm saving $${yearlySavings.toLocaleString()} a year by quitting ${PRODUCT_LABELS[product]}!`
+                                });
+                            } catch (err) {
+                                if (err.name !== 'AbortError') {
+                                    downloadImage(canvas);
+                                }
+                            }
+                        } else {
+                            // Fallback: download the image
+                            downloadImage(canvas);
+                        }
+                    }, 'image/png');
+                } catch (error) {
+                    console.error('Error capturing card:', error);
+                    alert('Unable to capture card. Try again!');
+                }
+            };
+            
+            const downloadImage = (canvas) => {
+                const link = document.createElement('a');
+                link.download = 'quit-to-win-card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                alert('Card image downloaded! Share it on social media.');
             };
 
             return (
@@ -366,7 +411,7 @@
                             </h2>
 
                             {/* THE POSTCARD */}
-                            <div className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
+                            <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
                                 {/* Decorative BG Elements */}
                                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-10 rounded-bl-full ${textAccent}`}></div>
                                 
@@ -413,11 +458,11 @@
                                 {/* Hover Effect Overlay for sharing */}
                                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                     <button 
-                                        onClick={handleCopy}
+                                        onClick={handleShare}
                                         className="bg-white text-black px-6 py-3 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform flex items-center gap-2 hover:bg-gray-100"
                                     >
                                         <IconShare className="w-4 h-4" />
-                                        Copy & Share
+                                        Share Image
                                     </button>
                                 </div>
                             </div>
