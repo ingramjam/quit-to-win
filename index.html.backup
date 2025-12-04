@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kick It California - Savings Calculator</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700;900&family=Share+Tech+Mono&family=Comic+Sans+MS&display=swap" rel="stylesheet">
+    
+    <!-- html2canvas for image capture -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <style>
+        /* Base Fonts */
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-grotesk { font-family: 'Space Grotesk', sans-serif; }
+        .font-tech { font-family: 'Share Tech Mono', monospace; }
+        
+        /* --- TEEN THEME: Gaming/Tech --- */
+        .bg-grid-pattern {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 157, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 157, 0.05) 1px, transparent 1px);
+        }
+        .theme-teen { 
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%); 
+            color: #e2e8f0;
+        }
+        .card-teen { 
+            background: #0f172a; 
+            border: 2px solid #00ff9d; 
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.2); 
+        }
+        .btn-teen { 
+            background-color: #00ff9d; 
+            color: #020617; 
+            font-family: 'Share Tech Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-teen:hover { 
+            background-color: #00cc7d; 
+            box-shadow: 0 0 10px #00ff9d;
+        }
+        .accent-teen { color: #00ff9d; }
+
+        /* --- ADULT THEME: MTV 80s/90s --- */
+        @keyframes gradient-x {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .theme-adult { 
+            background: linear-gradient(-45deg, #ff00cc, #3333ff, #00ffff, #ff3300);
+            background-size: 400% 400%;
+            animation: gradient-x 10s ease infinite;
+            color: #000;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+        }
+        .card-adult { 
+            background: #ffffff; 
+            border: 6px solid #000000; 
+            box-shadow: 8px 8px 0px #ff00cc; 
+            position: relative;
+        }
+        .card-adult::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.1) 10px,
+                rgba(0,0,0,0.1) 11px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+        .btn-adult { 
+            background-color: #000000; 
+            color: #ffff00; 
+            border: 3px solid #ff00cc; 
+            box-shadow: 4px 4px 0px #00ffff;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-family: 'Comic Sans MS', cursive;
+        }
+        .btn-adult:hover { 
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #00ffff;
+            animation: blink 0.5s ease infinite;
+        }
+        .accent-adult { 
+            color: #ff00cc; 
+            font-weight: 900;
+            text-shadow: 2px 2px 0px #00ffff;
+        }
+
+        /* --- SENIOR THEME: Corporate Healthcare --- */
+        .theme-senior { 
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%); 
+            color: #334155; 
+        }
+        .card-senior { 
+            background: #ffffff; 
+            border: 1px solid #cbd5e1; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .btn-senior { 
+            background-color: #0369a1; 
+            color: #ffffff; 
+            border-radius: 6px;
+        }
+        .btn-senior:hover { 
+            background-color: #075985; 
+        }
+        .accent-senior { color: #0369a1; }
+
+        /* Shared Animations & Utils */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        
+        .strike-through {
+            text-decoration: line-through;
+            text-decoration-thickness: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // --- Icons ---
+        const IconDollar = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        );
+        const IconTarget = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        );
+        const IconShare = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
+        );
+        const IconArrowRight = ({ className }) => (
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        );
+
+        // Product Icons
+        const IconVape = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="200" viewBox="0 0 50 200" className={className} style={{transform: 'scale(0.6)'}}>
+                <rect x="10" y="0" width="30" height="20" rx="4" fill="currentColor" opacity="0.3"/>
+                <rect x="11" y="20" width="28" height="80" fill="url(#vapeGradient)" opacity="0.8"/>
+                <defs>
+                    <linearGradient id="vapeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#FFD700" stopOpacity="0.6"/>
+                        <stop offset="100%" stopColor="#FFD700" stopOpacity="0.3"/>
+                    </linearGradient>
+                </defs>
+                <rect x="10" y="100" width="30" height="8" fill="#FF4500" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+                </rect>
+                <rect x="10" y="108" width="30" height="60" rx="0 0 4 4" fill="currentColor" opacity="0.4"/>
+                <circle cx="25" cy="120" r="3" fill="currentColor" opacity="0.8">
+                    <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        );
+        
+        const IconCigarette = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="200" viewBox="0 0 50 200" className={className} style={{transform: 'scale(0.6)'}}>
+                <rect x="12" y="0" width="26" height="30" fill="#444">
+                    <animate attributeName="height" values="20;30;20" dur="3s" repeatCount="indefinite"/>
+                </rect>
+                <circle cx="25" cy="30" r="13" fill="#ff4500" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <rect x="12" y="35" width="26" height="100" fill="#f5f5f5"/>
+                <line x1="15" y1="50" x2="45" y2="50" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+                <line x1="15" y1="70" x2="45" y2="70" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+                <line x1="15" y1="90" x2="45" y2="90" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+                <rect x="12" y="135" width="26" height="35" fill="#d2691e"/>
+            </svg>
+        );
+        
+        const IconJoint = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="200" viewBox="0 0 50 200" className={className} style={{transform: 'scale(0.6)'}}>
+                <polygon points="15,0 35,0 30,120 20,120" fill="#666" opacity="0.6">
+                    <animate attributeName="points" values="15,0 35,0 30,120 20,120;15,0 35,0 28,120 22,120;15,0 35,0 30,120 20,120" dur="4s" repeatCount="indefinite"/>
+                </polygon>
+                <ellipse cx="25" cy="0" rx="10" ry="3" fill="#4ade80" opacity="0.8">
+                    <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+                </ellipse>
+                <rect x="20" y="10" width="10" height="110" fill="#f5f5dc" opacity="0.9"/>
+                <line x1="22" y1="20" x2="28" y2="20" stroke="currentColor" strokeWidth="0.5" opacity="0.3"/>
+                <line x1="22" y1="40" x2="28" y2="40" stroke="currentColor" strokeWidth="0.5" opacity="0.3"/>
+                <line x1="22" y1="60" x2="28" y2="60" stroke="currentColor" strokeWidth="0.5" opacity="0.3"/>
+                <line x1="22" y1="80" x2="28" y2="80" stroke="currentColor" strokeWidth="0.5" opacity="0.3"/>
+                <rect x="18" y="120" width="14" height="20" rx="2" fill="#8b4513"/>
+            </svg>
+        );
+        
+        const IconPouch = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="100" viewBox="0 0 60 100" className={className} style={{transform: 'scale(0.8)'}}>
+                {/* Can body - cylindrical */}
+                <defs>
+                    <linearGradient id="canGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="currentColor" stopOpacity="0.3"/>
+                        <stop offset="50%" stopColor="currentColor" stopOpacity="0.5"/>
+                        <stop offset="100%" stopColor="currentColor" stopOpacity="0.3"/>
+                    </linearGradient>
+                </defs>
+                
+                {/* Top ellipse */}
+                <ellipse cx="30" cy="15" rx="18" ry="6" fill="currentColor" opacity="0.4"/>
+                <ellipse cx="30" cy="15" rx="15" ry="4" fill="currentColor" opacity="0.3"/>
+                
+                {/* Can body */}
+                <rect x="12" y="15" width="36" height="70" fill="url(#canGradient)"/>
+                
+                {/* Label area */}
+                <rect x="14" y="30" width="32" height="35" fill="currentColor" opacity="0.2"/>
+                
+                {/* Brand lines */}
+                <line x1="16" y1="40" x2="44" y2="40" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+                <line x1="16" y1="50" x2="44" y2="50" stroke="currentColor" strokeWidth="3" opacity="0.5"/>
+                <line x1="16" y1="55" x2="44" y2="55" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+                
+                {/* Bottom ellipse */}
+                <ellipse cx="30" cy="85" rx="18" ry="6" fill="currentColor" opacity="0.5"/>
+                
+                {/* Shine effect */}
+                <rect x="14" y="20" width="3" height="60" fill="#fff" opacity="0.3" rx="1"/>
+                
+                {/* Lid detail */}
+                <ellipse cx="30" cy="14" rx="16" ry="3" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+                <circle cx="30" cy="45" r="2" fill="currentColor" opacity="0.6">
+                    <animate attributeName="opacity" values="0.4;0.7;0.4" dur="2s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        );
+
+        // --- Data Dictionary ---
+        const DATA = {
+            "14-18": {
+                theme: "theme-teen",
+                label: "The Freedom Years",
+                tagline: "Your money = Your independence.",
+                products: {
+                    vape: { item: "AirPods Pro", price: 250, time: "3 Months", emoji: "🎧" },
+                    cigs: { item: "iPhone 15 Pro", price: 1000, time: "9 Months", emoji: "📱" },
+                    weed: { item: "First Car", price: 4000, time: "1.5 Years", emoji: "🚗" },
+                    pouch: { item: "PS5 Console", price: 500, time: "1 Year", emoji: "🎮" }
+                }
+            },
+            "18-35": {
+                theme: "theme-adult",
+                label: "The Building Years",
+                tagline: "Stop delaying your biggest milestones.",
+                products: {
+                    vape: { item: "Student Loan Payoff", price: 3000, time: "1 Year", emoji: "🎓" },
+                    cigs: { item: "Dream Vacation", price: 5000, time: "1 Year", emoji: "✈️" },
+                    weed: { item: "House Down Payment", price: 15000, time: "3 Years", emoji: "🏠" },
+                    pouch: { item: "Wedding/Engagement", price: 6000, time: "2 Years", emoji: "💍" }
+                }
+            },
+            "35-65": {
+                theme: "theme-senior",
+                label: "The Legacy Years",
+                tagline: "Protect your wealth and your health.",
+                products: {
+                    vape: { item: "Retirement Boost", price: 148000, time: "20 Years (Inv)", emoji: "📈" },
+                    cigs: { item: "Mortgage Freedom", price: 60000, time: "7 Years Early", emoji: "🏡" },
+                    weed: { item: "Kids' College Fund", price: 20000, time: "4 Years", emoji: "🎓" },
+                    pouch: { item: "Dental Implant Bill", price: 4000, time: "Avoided Cost", emoji: "🦷" }
+                }
+            }
+        };
+
+        const PRODUCT_LABELS = {
+            vape: "Vaping",
+            cigs: "Cigarettes",
+            weed: "Marijuana",
+            pouch: "Pouches/Chew"
+        };
+
+        const App = () => {
+            // Get product from URL parameter if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlProduct = urlParams.get('product');
+            const validProducts = ['vape', 'cigs', 'weed', 'pouch'];
+            const initialProduct = validProducts.includes(urlProduct) ? urlProduct : 'vape';
+            
+            const [ageGroup, setAgeGroup] = React.useState("14-18");
+            const [product, setProduct] = React.useState(initialProduct);
+            const [spend, setSpend] = React.useState(15); 
+            const [spendFreq, setSpendFreq] = React.useState("daily");
+
+            // Derived Data
+            const currentData = DATA[ageGroup];
+            const currentProductData = currentData.products[product];
+            const themeClass = currentData.theme;
+            const themeKey = themeClass.split('-')[1]; // teen, adult, senior
+            const cardClass = `card-${themeKey}`;
+            const btnClass = `btn-${themeKey}`;
+            const textAccent = `accent-${themeKey}`;
+
+            // Calculation Logic
+            const dailyCost = spendFreq === "daily" ? spend : spend / 7;
+            const monthlySavings = dailyCost * 30;
+            const yearlySavings = dailyCost * 365;
+            
+            // For the progress bar
+            const goalPrice = currentProductData.price;
+            const daysToGoal = Math.ceil(goalPrice / dailyCost);
+            const progress = Math.min((yearlySavings / goalPrice) * 100, 100);
+
+            // Progress Bar Color Logic
+            const progressBarColor = 
+                themeKey === 'teen' ? 'bg-[#00ff9d]' : 
+                themeKey === 'adult' ? 'bg-yellow-400' : 
+                'bg-[#0369a1]';
+
+            const handleCopy = async () => {
+                const postcardElement = document.getElementById('postcard');
+                if (!postcardElement) return;
+                
+                try {
+                    // Capture the card as canvas
+                    const canvas = await html2canvas(postcardElement, {
+                        backgroundColor: null,
+                        scale: 2,
+                        logging: false,
+                        useCORS: true
+                    });
+                    
+                    // Convert to blob
+                    canvas.toBlob(async (blob) => {
+                        // Try native share API first (mobile)
+                        if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'quit-to-win.png', { type: 'image/png' })] })) {
+                            const file = new File([blob], 'quit-to-win-card.png', { type: 'image/png' });
+                            try {
+                                await navigator.share({
+                                    files: [file],
+                                    title: 'My Quit to Win Results',
+                                    text: `I'm saving $${yearlySavings.toLocaleString()} a year by quitting ${PRODUCT_LABELS[product]}!`
+                                });
+                            } catch (err) {
+                                if (err.name !== 'AbortError') {
+                                    downloadImage(canvas);
+                                }
+                            }
+                        } else {
+                            // Fallback: download the image
+                            downloadImage(canvas);
+                        }
+                    }, 'image/png');
+                } catch (error) {
+                    console.error('Error capturing card:', error);
+                    alert('Error capturing image. Please try again.');
+                }
+            };
+
+            const downloadImage = (canvas) => {
+                const link = document.createElement('a');
+                link.download = 'quit-to-win-card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                alert('Card image downloaded! Share it on social media.');
+            };
+
+            return (
+                <div className={`min-h-screen transition-all duration-700 ${themeClass} ${themeKey === 'teen' ? 'bg-grid-pattern' : ''} font-sans`}>
+                    
+                    {/* Header */}
+                    <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+                        <div className="flex items-center gap-2">
+                            <div className={`p-2 rounded-lg ${themeKey === 'teen' ? 'bg-[#00ff9d] text-black' : themeKey === 'adult' ? 'bg-black text-white border-2 border-yellow-400' : 'bg-[#0369a1] text-white'}`}>
+                                <IconDollar className="w-6 h-6" />
+                            </div>
+                            <span className={`text-2xl font-bold font-grotesk tracking-tight ${themeKey === 'adult' ? 'uppercase italic' : ''}`}>
+                                Quit<span className={textAccent}>&</span>Win
+                            </span>
+                        </div>
+                        
+                        {/* Age Selector */}
+                        <div className={`flex p-1 gap-1 ${themeKey === 'senior' ? 'bg-slate-200 rounded-lg' : themeKey === 'teen' ? 'bg-slate-800/50 rounded-none border border-[#00ff9d]' : 'bg-black/10 rounded-none border-2 border-black'}`}>
+                            {Object.keys(DATA).map((age) => (
+                                <button
+                                    key={age}
+                                    onClick={() => setAgeGroup(age)}
+                                    className={`px-4 py-2 text-sm font-bold transition-all duration-300
+                                        ${ageGroup === age 
+                                            ? (themeKey === 'teen' ? 'bg-[#00ff9d] text-black' : themeKey === 'adult' ? 'bg-black text-white' : 'bg-white text-[#0369a1] shadow-sm rounded-md') 
+                                            : 'opacity-70 hover:opacity-100'
+                                        }`}
+                                >
+                                    {age}
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
+
+                    {/* Hero */}
+                    <header className="max-w-4xl mx-auto text-center mt-12 px-4 relative z-10">
+                        <span className={`inline-block py-1 px-4 mb-4 text-xs font-bold uppercase tracking-widest
+                            ${themeKey === 'teen' ? 'border border-[#00ff9d] text-[#00ff9d] font-tech' : 
+                              themeKey === 'adult' ? 'bg-yellow-400 text-black border-2 border-black rotate-1' : 
+                              'bg-sky-100 text-sky-800 rounded-full'}`}>
+                            {currentData.label}
+                        </span>
+                        <h1 className={`text-5xl md:text-7xl font-bold mb-6 leading-tight font-grotesk ${themeKey === 'adult' ? 'uppercase italic drop-shadow-[4px_4px_0_rgba(0,0,0,0.2)]' : ''}`}>
+                            Your habit costs <br/>
+                            <span className={textAccent}>more than money.</span>
+                        </h1>
+                        <p className={`text-xl opacity-90 max-w-2xl mx-auto mb-10 ${themeKey === 'teen' ? 'font-tech' : ''}`}>
+                            {currentData.tagline}
+                        </p>
+
+                        {/* Product Toggles */}
+                        <div className="flex flex-wrap justify-center gap-3 mb-16">
+                            {Object.entries(PRODUCT_LABELS).map(([key, label]) => (
+                                <button
+                                    key={key}
+                                    onClick={() => setProduct(key)}
+                                    className={`px-6 py-3 font-bold transition-all 
+                                        ${product === key 
+                                            ? `${btnClass} transform scale-105` 
+                                            : `border-2 border-current bg-transparent opacity-60 hover:opacity-100 ${themeKey === 'senior' ? 'rounded-md' : ''}`
+                                        }`}
+                                >
+                                    {label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Product Icons */}
+                        <div className="flex justify-center items-center gap-8 md:gap-16 mb-12">
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'vape' ? `${textAccent} scale-125 opacity-100` : 'opacity-20 scale-90 hover:opacity-40'}`} onClick={() => setProduct('vape')}>
+                                <IconVape className="w-16 h-32" />
+                            </div>
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'cigs' ? `${textAccent} scale-125 opacity-100` : 'opacity-20 scale-90 hover:opacity-40'}`} onClick={() => setProduct('cigs')}>
+                                <IconCigarette className="w-16 h-32" />
+                            </div>
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'weed' ? `${textAccent} scale-125 opacity-100` : 'opacity-20 scale-90 hover:opacity-40'}`} onClick={() => setProduct('weed')}>
+                                <IconJoint className="w-16 h-32" />
+                            </div>
+                            <div className={`transition-all duration-500 cursor-pointer ${product === 'pouch' ? `${textAccent} scale-125 opacity-100` : 'opacity-20 scale-90 hover:opacity-40'}`} onClick={() => setProduct('pouch')}>
+                                <IconPouch className="w-12 h-24" />
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Main Grid */}
+                    <main className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 pb-12 relative z-10">
+                        
+                        {/* Left: Calculator Input */}
+                        <div className={`p-8 ${cardClass} ${themeKey === 'senior' ? 'rounded-2xl' : themeKey === 'teen' ? 'rounded-none' : 'rounded-none'}`}>
+                            <h2 className={`text-2xl font-bold mb-8 flex items-center gap-3 font-grotesk ${themeKey === 'adult' ? 'uppercase' : ''}`}>
+                                <IconTarget className={textAccent} />
+                                Calculate Savings
+                            </h2>
+                            
+                            <div className="space-y-8">
+                                <div>
+                                    <label className={`block text-sm font-bold mb-4 opacity-80 ${themeKey === 'teen' ? 'font-tech uppercase' : ''}`}>
+                                        Daily Spend
+                                    </label>
+                                    <div className="flex items-center gap-4">
+                                        <span className={`text-4xl font-bold ${themeKey === 'teen' ? 'font-tech' : ''}`}>${spend}</span>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="100" 
+                                            value={spend} 
+                                            onChange={(e) => setSpend(Number(e.target.value))}
+                                            className={`flex-1 h-2 appearance-none cursor-pointer bg-current opacity-30 rounded-full`}
+                                            style={{accentColor: themeKey === 'teen' ? '#00ff9d' : themeKey === 'adult' ? '#000' : '#0369a1'}}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className={`block text-sm font-bold mb-4 opacity-80 ${themeKey === 'teen' ? 'font-tech uppercase' : ''}`}>
+                                        Frequency
+                                    </label>
+                                    <div className="flex gap-4">
+                                        {['daily', 'weekly'].map(freq => (
+                                            <button 
+                                                key={freq}
+                                                onClick={() => setSpendFreq(freq)}
+                                                className={`flex-1 py-3 font-bold capitalize border-2
+                                                    ${spendFreq === freq 
+                                                        ? `${themeKey === 'adult' ? 'bg-black text-white border-black' : themeKey === 'teen' ? 'bg-[#00ff9d]/20 border-[#00ff9d] text-[#00ff9d]' : 'bg-sky-50 border-[#0369a1] text-[#0369a1] rounded-md'}` 
+                                                        : 'border-current opacity-40 hover:opacity-70 bg-transparent'}`}
+                                            >
+                                                {freq}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="pt-8 border-t border-current/10">
+                                    <div className="grid grid-cols-3 gap-4 text-center">
+                                        {[
+                                            { label: '1 Month', val: monthlySavings },
+                                            { label: '1 Year', val: yearlySavings, highlight: true },
+                                            { label: '10 Years', val: yearlySavings * 10 }
+                                        ].map((stat, i) => (
+                                            <div key={i} className={`p-4 ${stat.highlight ? (themeKey === 'senior' ? 'bg-sky-50 rounded-xl' : themeKey === 'teen' ? 'bg-[#00ff9d]/10 border border-[#00ff9d]' : 'bg-yellow-300 border-2 border-black text-black') : 'opacity-80'}`}>
+                                                <div className={`text-xs opacity-70 uppercase mb-1 font-bold ${themeKey === 'teen' ? 'font-tech' : ''}`}>{stat.label}</div>
+                                                <div className={`text-xl font-bold ${themeKey === 'teen' ? 'font-tech' : ''}`}>${Math.round(stat.val).toLocaleString()}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right: The Postcard Preview */}
+                        <div className="flex flex-col items-center">
+                            <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 font-grotesk ${themeKey === 'adult' ? 'uppercase' : ''}`}>
+                                <IconShare className={textAccent} />
+                                Your Reality Check
+                            </h2>
+
+                            {/* THE POSTCARD */}
+                            <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group ${themeKey === 'senior' ? 'rounded-2xl' : ''}`}>
+                                
+                                <div>
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className={`font-black text-lg tracking-tighter uppercase font-grotesk italic leading-none opacity-80`}>
+                                            Kick It <br/>
+                                            <span className={`${textAccent} font-medium tracking-normal not-italic`}>California</span>
+                                        </div>
+                                        <span className="text-6xl animate-float drop-shadow-xl">
+                                            {currentProductData.emoji}
+                                        </span>
+                                    </div>
+                                    
+                                    <div className={`space-y-2 ${themeKey === 'adult' ? 'font-black uppercase italic' : 'font-bold'}`}>
+                                        <h3 className="text-2xl md:text-3xl leading-tight opacity-50">
+                                            I'm trading <br/>
+                                            <span className="strike-through decoration-red-500 decoration-4">{PRODUCT_LABELS[product]}</span>
+                                        </h3>
+                                        <h3 className={`text-3xl md:text-4xl leading-tight ${textAccent}`}>
+                                            for {currentProductData.item}
+                                        </h3>
+                                    </div>
+
+                                    <p className={`mt-6 text-sm opacity-80 leading-relaxed ${themeKey === 'teen' ? 'font-tech' : ''}`}>
+                                        By quitting now, I save{' '}
+                                        <span className="font-bold border-b-2 border-current whitespace-nowrap">${Math.round(yearlySavings).toLocaleString()}</span>
+                                        {' '}this year alone.
+                                        {daysToGoal < 365 ? (
+                                            <> I can afford this goal in just {daysToGoal} days.</>
+                                        ) : (
+                                            <> That's a huge step toward financial freedom.</>
+                                        )}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <div className={`w-full h-4 mb-4 overflow-hidden ${themeKey === 'senior' ? 'rounded-full bg-gray-100' : 'bg-black/10 border border-current'}`}>
+                                        <div 
+                                            className={`h-full transition-all duration-1000 ease-out ${progressBarColor}`} 
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+                                    <div className={`flex justify-between text-xs font-bold opacity-60 ${themeKey === 'teen' ? 'font-tech' : ''}`}>
+                                        <span>$0</span>
+                                        <span>GOAL: ${goalPrice.toLocaleString()}</span>
+                                    </div>
+                                </div>
+                                
+                                {/* Hover Effect Overlay */}
+                                <div className={`absolute inset-0 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center ${themeKey === 'senior' ? 'bg-white/60 rounded-2xl' : 'bg-black/60'}`}>
+                                    <button 
+                                        onClick={handleCopy}
+                                        className={`px-8 py-4 font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform ${btnClass}`}
+                                    >
+                                        <IconShare className="w-5 h-5" />
+                                        Share Image
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <p className="mt-6 text-sm opacity-50 text-center">
+                                Hover card to share your win
+                            </p>
+                        </div>
+                    </main>
+
+                    {/* CTA Section */}
+                    <section className="max-w-4xl mx-auto px-4 mb-20 relative z-10">
+                        <div className={`p-8 md:p-12 text-center transition-colors duration-500 
+                            ${cardClass}
+                            ${themeKey === 'senior' ? 'rounded-3xl' : ''}`}>
+                            
+                            <div className="flex justify-center mb-6">
+                                <img 
+                                    src="https://kicform.org/hs-fs/hubfs/kic%20logo2.png?width=118&height=40&name=kic%20logo2.png" 
+                                    alt="Kick It California Logo" 
+                                    className="h-12 object-contain" 
+                                />
+                            </div>
+                            <h2 className={`text-3xl md:text-4xl font-bold mb-4 font-grotesk ${themeKey === 'adult' ? 'uppercase italic' : ''}`}>
+                                Ready to make this real?
+                            </h2>
+                            <p className="text-lg opacity-80 mb-8 max-w-xl mx-auto">
+                                You've done the math. Now take the first step. Kick It California provides free, personalized support to help you quit for good.
+                            </p>
+                            <a 
+                                href="https://kicform.org/kick-it-2" 
+                                target="_blank"
+                                className={`inline-flex items-center gap-3 px-8 py-4 text-lg font-bold transition-transform hover:scale-105 ${btnClass}`}
+                            >
+                                Kick It Now
+                                <IconArrowRight className="w-5 h-5" />
+                            </a>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className={`py-12 text-center border-t relative z-10 ${themeKey === 'adult' ? 'border-black bg-white' : themeKey === 'teen' ? 'border-[#00ff9d]/20 bg-[#020617]' : 'border-gray-200 bg-white'}`}>
+                        <p className="opacity-40 text-sm">
+                            Kick It California is a free program of UC San Diego.<br/>
+                            Disclaimer: Estimates only. Prices vary by state.
+                        </p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

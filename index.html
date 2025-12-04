@@ -371,7 +371,8 @@
                                 <img 
                                     src="https://kicform.org/hs-fs/hubfs/kic%20logo2.png?width=118&height=40&name=kic%20logo2.png" 
                                     alt="Kick It California Logo" 
-                                    className={`h-8 object-contain ${themeKey === 'teen' ? 'invert brightness-0 drop-shadow-[0_0_5px_#00ff9d]' : ''}`}
+                                    className={`h-8 object-contain ${themeKey === 'teen' ? 'invert brightness-0 drop-shadow-[0_0_5px_#00ff9d]' : themeKey === 'senior' ? 'brightness-0 saturate-100 hue-rotate-180 contrast-150' : ''}`}
+                                    style={themeKey === 'senior' ? {filter: 'brightness(0) saturate(100%) invert(35%) sepia(97%) saturate(1274%) hue-rotate(172deg) brightness(91%) contrast(101%)'} : {}}
                                 />
                             </div>
                         </div>
@@ -624,7 +625,7 @@
                                 {currentData.services.map((service, i) => (
                                     <a 
                                         key={i}
-                                        href="https://kicform.org/kick-it-2" 
+                                        href={themeKey === 'teen' ? "https://kicform.org/kick-it-2/quit-now" : "https://kicform.org/kick-it-2"} 
                                         target="_blank"
                                         className={`group block p-8 transition-all duration-300
                                             ${themeKey === 'teen' ? 'bg-black/40 border border-[#00ff9d]/30 hover:border-[#00ff9d] hover:shadow-[0_0_20px_rgba(0,255,157,0.3)]' : 
