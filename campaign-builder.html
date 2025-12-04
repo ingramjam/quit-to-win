@@ -391,9 +391,6 @@
 
             const yearlySavings = spend * 365;
             const progress = Math.min((yearlySavings / productContent.goalPrice) * 100, 100);
-
-            // Tips state
-            const [currentTipIndex, setCurrentTipIndex] = React.useState(0);
             
             // More detailed tips for each product
             const tipsData = {
@@ -428,7 +425,6 @@
             };
 
             const tips = tipsData[productKey] || tipsData.vape;
-            const currentTip = tips[currentTipIndex];
 
             return (
                 <div className="page-transition">
@@ -522,76 +518,27 @@
 
                         {/* Interactive Tips Section */}
                         <section className="mb-20 slide-up">
-                            <div className="mb-12">
-                                <h2 className="text-4xl font-bold mb-2 flex items-center gap-3">
-                                    <span className="p-3 bg-accent/20 text-accent rounded-xl"><IconLightbulb /></span>
-                                    Expert Tips & Facts
-                                </h2>
-                                <p className="text-lg opacity-70">Click through to learn key facts about {productContent.label}</p>
-                            </div>
+                            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
+                                <span className="p-2 bg-accent/20 text-accent rounded-lg"><IconLightbulb /></span>
+                                Key Facts
+                            </h2>
 
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                {/* Main Tips Card */}
-                                <div className="lg:col-span-2">
-                                    <div className="card-dynamic p-12 rounded-3xl border-2 border-accent h-full flex flex-col">
-                                        <div className="flex items-start justify-between mb-6">
-                                            <div className="text-6xl">{currentTip.icon}</div>
-                                            <div className="text-xs font-bold text-accent opacity-60 bg-accent/10 px-3 py-1 rounded-full">
-                                                {currentTipIndex + 1} of {tips.length}
-                                            </div>
-                                        </div>
-                                        <h3 className="text-3xl font-bold mb-4 text-accent">{currentTip.title}</h3>
-                                        <p className="text-lg leading-relaxed opacity-90 mb-8 flex-grow">{currentTip.tip}</p>
-                                        
-                                        {/* Navigation Dots */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex gap-2">
-                                                {tips.map((_, i) => (
-                                                    <button 
-                                                        key={i}
-                                                        onClick={() => setCurrentTipIndex(i)}
-                                                        className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentTipIndex ? 'bg-accent w-8' : 'bg-accent/30 hover:bg-accent/50'}`}
-                                                    />
-                                                ))}
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <button 
-                                                    onClick={() => setCurrentTipIndex(Math.max(0, currentTipIndex - 1))}
-                                                    disabled={currentTipIndex === 0}
-                                                    className="p-2 text-accent rounded-lg hover:bg-accent/10 disabled:opacity-30 transition-all"
-                                                >
-                                                    ← Prev
-                                                </button>
-                                                <button 
-                                                    onClick={() => setCurrentTipIndex(Math.min(tips.length - 1, currentTipIndex + 1))}
-                                                    disabled={currentTipIndex === tips.length - 1}
-                                                    className="p-2 text-accent rounded-lg hover:bg-accent/10 disabled:opacity-30 transition-all"
-                                                >
-                                                    Next →
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Quick Tips List */}
-                                <div className="space-y-3">
-                                    <p className="text-xs font-bold text-accent uppercase tracking-widest opacity-60 px-2">All Tips</p>
-                                    {tips.map((tip, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => setCurrentTipIndex(i)}
-                                            className={`w-full text-left p-4 rounded-xl transition-all border-2 ${
-                                                i === currentTipIndex 
-                                                    ? 'bg-accent/20 border-accent' 
-                                                    : 'bg-white/30 border-transparent hover:bg-white/50'
-                                            }`}
-                                        >
-                                            <div className="text-2xl mb-2">{tip.icon}</div>
-                                            <div className="text-sm font-bold">{tip.title}</div>
-                                        </button>
-                                    ))}
-                                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                {tips.map((tip, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setCurrentTipIndex(i)}
+                                        className={`p-4 rounded-xl transition-all border-2 text-left cursor-pointer ${
+                                            i === currentTipIndex 
+                                                ? 'bg-accent/20 border-accent shadow-lg' 
+                                                : 'bg-white/30 border-transparent hover:bg-white/50 hover:border-accent/30'
+                                        }`}
+                                    >
+                                        <div className="text-3xl mb-2">{tip.icon}</div>
+                                        <div className="font-bold text-sm mb-1">{tip.title}</div>
+                                        <div className="text-xs opacity-70 leading-tight">{tip.tip}</div>
+                                    </button>
+                                ))}
                             </div>
                         </section>
 
