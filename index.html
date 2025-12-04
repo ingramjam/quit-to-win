@@ -82,11 +82,11 @@
             z-index: 0;
         }
         
-        /* Theme Gradients - ADA Compliant, No Drop Shadows */
+        /* Theme Gradients - Distinct identities */
         
-        /* TEEN: Digital/Gaming - Dark mode with high contrast */
+        /* TEEN: Digital/Gaming - Dark techy */
         .theme-teen { 
-            background: #0a0e27;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
             color: #ffffff;
         }
         .theme-teen::before {
@@ -94,103 +94,124 @@
             position: fixed;
             inset: 0;
             background: 
-                repeating-linear-gradient(0deg, rgba(34, 211, 238, 0.05) 0px, transparent 2px, transparent 4px),
-                repeating-linear-gradient(90deg, rgba(139, 92, 246, 0.05) 0px, transparent 2px, transparent 4px);
+                repeating-linear-gradient(0deg, rgba(0, 255, 157, 0.03) 0px, transparent 2px, transparent 4px),
+                repeating-linear-gradient(90deg, rgba(0, 230, 255, 0.03) 0px, transparent 2px, transparent 4px);
             animation: scan 8s linear infinite;
             z-index: 0;
         }
-        @keyframes scan {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100px); }
-        }
 
-        /* ADULT: Grungy Neon MTV - Bold colors */
+        /* ADULT: MTV 80s/90s Neon Grunge */
         .theme-adult { 
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b4e 50%, #1a1a1a 100%);
+            background: linear-gradient(135deg, #ff006e 0%, #8338ec 25%, #3a86ff 50%, #fb5607 75%, #ffbe0b 100%);
             background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            color: #ffffff;
-        }
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            animation: gradient 20s ease infinite;
+            color: #000000;
         }
 
-        /* SENIOR: Corporate Healthcare - Light, professional */
+        /* SENIOR: Clean Corporate Healthcare */
         .theme-senior { 
-            background: #f8fafc;
-            color: #0f172a;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #f8fafc 100%);
+            color: #1e293b;
         }
 
-        /* Card Styles - High Contrast */
+        /* Card Styles */
         .card-teen { 
-            background: #1e293b;
-            border: 2px solid #22d3ee;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 2px solid #00ff9d;
             color: #ffffff;
         }
         .card-adult { 
-            background: rgba(255, 255, 255, 0.98);
-            border: 4px solid #d946ef;
-            color: #1a1a1a;
+            background: #ffffff;
+            border: 6px solid #000000;
+            color: #000000;
+            position: relative;
+        }
+        .card-adult::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: -8px;
+            bottom: -8px;
+            background: #ff006e;
+            border: 6px solid #000000;
+            z-index: -1;
         }
         .card-senior { 
             background: #ffffff;
-            border: 2px solid #cbd5e1;
-            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
         }
         
-        /* Accent Colors - WCAG AAA compliant */
+        /* Accent Colors */
         .accent-teen { 
-            color: #22d3ee; 
+            color: #00ff9d; 
             font-weight: 700;
         }
         .accent-adult { 
-            color: #d946ef; 
+            color: #8338ec; 
             font-weight: 900;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         .accent-senior { 
-            color: #1e40af; 
-            font-weight: 700;
+            color: #0369a1; 
+            font-weight: 600;
         }
 
-        /* Button Styles - High Contrast */
+        /* Button Styles */
         .btn-teen { 
-            background: #22d3ee;
-            color: #0a0e27;
-            border: 2px solid #22d3ee;
+            background: #00ff9d;
+            color: #0f0f23;
+            border: 2px solid #00ff9d;
             font-weight: 700;
             transition: all 0.2s ease;
         }
         .btn-teen:hover { 
-            background: #0891b2;
-            border-color: #0891b2;
+            background: #00cc7d;
+            border-color: #00cc7d;
         }
         
         .btn-adult { 
-            background: #d946ef;
-            color: #ffffff;
-            border: 4px solid #ffffff;
+            background: #000000;
+            color: #ffbe0b;
+            border: 6px solid #ffbe0b;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .btn-adult::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            background: #ff006e;
+            border: 6px solid #000000;
+            z-index: -1;
             transition: all 0.2s ease;
         }
-        .btn-adult:hover { 
-            background: #a21caf;
+        .btn-adult:hover::before { 
+            top: 3px;
+            left: 3px;
+            right: -3px;
+            bottom: -3px;
         }
         
         .btn-senior { 
-            background: #1e40af;
+            background: #0369a1;
             color: #ffffff;
-            border: 2px solid #1e40af;
+            border: 2px solid #0369a1;
             font-weight: 600;
+            letter-spacing: 0.025em;
             transition: all 0.2s ease;
         }
         .btn-senior:hover { 
-            background: #1e3a8a;
-            border-color: #1e3a8a;
+            background: #075985;
+            border-color: #075985;
         }
         
         /* Floating CTA */
@@ -468,19 +489,19 @@
                     {/* Navigation / Header */}
                     <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
                         <div className="flex items-center gap-2">
-                            <div className={`p-2 rounded-lg ${currentData.theme === 'teen' ? 'bg-cyan-400 text-black' : currentData.theme === 'adult' ? 'bg-pink-600 text-white border-4 border-white' : 'bg-blue-700 text-white'}`}>
-                                <IconDollar className="w-6 h-6" />
+                            <div className={`p-2 rounded-lg ${currentData.theme === 'teen' ? 'bg-gradient-to-br from-emerald-400 to-cyan-400' : currentData.theme === 'adult' ? 'bg-black border-4 border-yellow-300' : 'bg-sky-600'}`}>
+                                <IconDollar className={`w-6 h-6 ${currentData.theme === 'teen' ? 'text-slate-900' : 'text-white'}`} />
                             </div>
                             <span className={`text-2xl font-bold brand-font tracking-tight ${currentData.theme === 'teen' ? 'text-white' : currentData.theme === 'adult' ? 'text-white font-black' : 'text-slate-900'}`}>Quit<span className={textAccent}>&</span>Win</span>
                         </div>
                         
                         {/* Age Selector */}
-                        <div className={`flex rounded-full p-1 ${currentData.theme === 'teen' ? 'bg-slate-800 border-2 border-cyan-400' : currentData.theme === 'adult' ? 'bg-black border-4 border-pink-600' : 'bg-slate-100 border-2 border-slate-300'}`}>
+                        <div className={`flex rounded-full p-1 ${currentData.theme === 'teen' ? 'bg-slate-800/50 backdrop-blur-sm border-2 border-emerald-400' : currentData.theme === 'adult' ? 'bg-black border-4 border-yellow-300' : 'bg-white border-2 border-slate-200'}`}>
                             {Object.keys(DATA).map((age) => (
                                 <button
                                     key={age}
                                     onClick={() => setAgeGroup(age)}
-                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${ageGroup === age ? (currentData.theme === 'teen' ? 'bg-cyan-400 text-black' : currentData.theme === 'adult' ? 'bg-pink-600 text-white font-black' : 'bg-blue-700 text-white') : (currentData.theme === 'teen' ? 'text-cyan-400 hover:text-cyan-300' : currentData.theme === 'adult' ? 'text-white hover:text-pink-300' : 'text-slate-500 hover:text-blue-700')}`}
+                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${ageGroup === age ? (currentData.theme === 'teen' ? 'bg-emerald-400 text-slate-900' : currentData.theme === 'adult' ? 'bg-yellow-300 text-black font-black' : 'bg-sky-600 text-white') : (currentData.theme === 'teen' ? 'text-emerald-400 hover:text-emerald-300' : currentData.theme === 'adult' ? 'text-yellow-300 hover:text-yellow-200 font-bold' : 'text-slate-600 hover:text-sky-600')}`}
                                 >
                                     {age}
                                 </button>
@@ -490,14 +511,14 @@
 
                     {/* Hero Section */}
                     <header className="max-w-4xl mx-auto text-center mt-12 px-4 relative z-10">
-                        <span className={`inline-block py-2 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${currentData.theme === 'teen' ? 'bg-cyan-400 text-black border-2 border-cyan-400' : currentData.theme === 'adult' ? 'bg-pink-600 text-white border-4 border-white font-black' : 'bg-blue-700 text-white border-2 border-blue-700'}`}>
+                        <span className={`inline-block py-2 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${currentData.theme === 'teen' ? 'bg-emerald-400 text-slate-900 border-2 border-emerald-400' : currentData.theme === 'adult' ? 'bg-black text-yellow-300 border-4 border-yellow-300 font-black' : 'bg-sky-600 text-white'}`}>
                             {currentData.label}
                         </span>
                         <h1 className={`text-5xl md:text-7xl font-bold mb-6 leading-tight ${currentData.theme === 'teen' ? 'text-white' : currentData.theme === 'adult' ? 'text-white font-black' : 'text-slate-900'}`}>
                             Your habit costs <br/>
                             <span className={textAccent}>more than money.</span>
                         </h1>
-                        <p className={`text-xl max-w-2xl mx-auto mb-10 ${currentData.theme === 'teen' ? 'text-white opacity-90' : currentData.theme === 'adult' ? 'text-white font-bold' : 'text-slate-700'}`}>
+                        <p className={`text-xl max-w-2xl mx-auto mb-10 ${currentData.theme === 'teen' ? 'text-white/90' : currentData.theme === 'adult' ? 'text-white font-bold' : 'text-slate-700'}`}>
                             {currentData.tagline}
                         </p>
 
