@@ -22,32 +22,65 @@
         body { 
             font-family: 'Inter', sans-serif; 
             overflow-x: hidden;
-            transition: background-color 0.7s ease, color 0.7s ease;
         }
         h1, h2, h3, .font-display { font-family: 'Space Grotesk', sans-serif; }
-        
-        /* --- DYNAMIC THEME ENGINE --- */
-        
-        /* Freedom Theme (Airy, Electric, Sky) */
-        .theme-freedom {
-            --bg-primary: #f0f9ff;
-            --bg-secondary: #e0f2fe;
-            --accent-main: #0ea5e9;
-            --accent-glow: #38bdf8;
-            --text-main: #0c4a6e;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --btn-grad: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+
+        /* Color Palette - Vibrant & Dynamic */
+        :root {
+            --primary-1: #0ea5e9;
+            --primary-2: #06b6d4;
+            --accent-1: #ec4899;
+            --accent-2: #f97316;
+            --accent-3: #22c55e;
+            --accent-4: #a855f7;
+            --dark-1: #0f172a;
+            --dark-2: #1e293b;
+            --light-1: #f8fafc;
+            --light-2: #e2e8f0;
         }
 
-        /* Resolution Theme (Bold, energetic, Gold/Dark) */
-        .theme-resolution {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --accent-main: #fbbf24;
-            --accent-glow: #f59e0b;
-            --text-main: #f1f5f9;
-            --card-bg: rgba(30, 41, 59, 0.9);
-            --btn-grad: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+        .gradient-primary { background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); }
+        .gradient-vibrant { background: linear-gradient(135deg, #ec4899 0%, #f97316 100%); }
+        .gradient-success { background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
+        
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-hover { transition: all 0.3s ease; cursor: pointer; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2); }
+
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.3); } 50% { box-shadow: 0 0 40px rgba(14, 165, 233, 0.6); } }
+
+        .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #0ea5e9 0%, #ec4899 50%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .icon-gradient {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #0ea5e9 0%, #ec4899 100%) 1;
         }
 
         /* Supportive Theme (Calming, Teal, Organic) */
