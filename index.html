@@ -307,8 +307,14 @@
         };
 
         const App = () => {
+            // Get product from URL parameter if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlProduct = urlParams.get('product');
+            const validProducts = ['vape', 'cigs', 'weed', 'pouch'];
+            const initialProduct = validProducts.includes(urlProduct) ? urlProduct : 'vape';
+            
             const [ageGroup, setAgeGroup] = React.useState("14-18");
-            const [product, setProduct] = React.useState("vape");
+            const [product, setProduct] = React.useState(initialProduct);
             const [spend, setSpend] = React.useState(15); 
             const [spendFreq, setSpendFreq] = React.useState("daily");
 
