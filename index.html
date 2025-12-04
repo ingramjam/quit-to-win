@@ -15,17 +15,96 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- html2canvas for card capture -->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .brand-font { font-family: 'Space Grotesk', sans-serif; }
+        /* Base Fonts */
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-grotesk { font-family: 'Space Grotesk', sans-serif; }
+        .font-tech { font-family: 'Share Tech Mono', monospace; }
         
-        /* Custom Animations */
+        /* --- TEEN THEME: Gaming/Tech --- */
+        .bg-grid-pattern {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 157, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 157, 0.05) 1px, transparent 1px);
+        }
+        .theme-teen { 
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%); 
+            color: #e2e8f0;
+        }
+        .card-teen { 
+            background: #0f172a; 
+            border: 2px solid #00ff9d; 
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.2); 
+        }
+        .btn-teen { 
+            background-color: #00ff9d; 
+            color: #020617; 
+            font-family: 'Share Tech Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-teen:hover { 
+            background-color: #00cc7d; 
+            box-shadow: 0 0 10px #00ff9d;
+        }
+        .accent-teen { color: #00ff9d; }
+
+        /* --- ADULT THEME: MTV 80s/90s --- */
+        @keyframes gradient-x {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .theme-adult { 
+            background: linear-gradient(-45deg, #ff00cc, #3333ff, #ffcc00, #ff3300);
+            background-size: 400% 400%;
+            animation: gradient-x 10s ease infinite;
+            color: #000;
+        }
+        .card-adult { 
+            background: #ffffff; 
+            border: 6px solid #000000; 
+            box-shadow: 8px 8px 0px #ff00cc; 
+        }
+        .btn-adult { 
+            background-color: #000000; 
+            color: #ffffff; 
+            border: 3px solid #fbbf24; 
+            box-shadow: 4px 4px 0px #ff00cc;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        .btn-adult:hover { 
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #ff00cc;
+        }
+        .accent-adult { color: #000000; font-weight: 900; }
+
+        /* --- SENIOR THEME: Corporate Healthcare --- */
+        .theme-senior { 
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%); 
+            color: #334155; 
+        }
+        .card-senior { 
+            background: #ffffff; 
+            border: 1px solid #cbd5e1; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .btn-senior { 
+            background-color: #0369a1; 
+            color: #ffffff; 
+            border-radius: 6px;
+        }
+        .btn-senior:hover { 
+            background-color: #075985; 
+        }
+        .accent-senior { color: #0369a1; }
+
+        /* Shared Animations & Utils */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -33,221 +112,9 @@
         }
         .animate-float { animation: float 6s ease-in-out infinite; }
         
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px currentColor; }
-            50% { box-shadow: 0 0 40px currentColor; }
-        }
-        
-        @keyframes grain {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -5%); }
-            20% { transform: translate(-10%, 5%); }
-            30% { transform: translate(5%, -10%); }
-            40% { transform: translate(-5%, 15%); }
-            50% { transform: translate(-10%, 5%); }
-            60% { transform: translate(15%, 0); }
-            70% { transform: translate(0, 10%); }
-            80% { transform: translate(-15%, 0); }
-            90% { transform: translate(10%, 5%); }
-        }
-        
-        /* Texture overlays */
-        .texture-overlay::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.03) 2px, rgba(255,255,255,.03) 4px),
-                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,.03) 2px, rgba(255,255,255,.03) 4px);
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .grain::after {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            right: -50%;
-            bottom: -50%;
-            width: 200%;
-            height: 200%;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>');
-            opacity: 0.4;
-            pointer-events: none;
-            animation: grain 8s steps(10) infinite;
-            z-index: 0;
-        }
-        
-        /* Theme Gradients - Distinct identities */
-        
-        /* TEEN: Digital/Gaming - Dark techy */
-        .theme-teen { 
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            color: #ffffff;
-        }
-        .theme-teen::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: 
-                repeating-linear-gradient(0deg, rgba(0, 255, 157, 0.03) 0px, transparent 2px, transparent 4px),
-                repeating-linear-gradient(90deg, rgba(0, 230, 255, 0.03) 0px, transparent 2px, transparent 4px);
-            animation: scan 8s linear infinite;
-            z-index: 0;
-        }
-
-        /* ADULT: MTV 80s/90s Neon Grunge */
-        .theme-adult { 
-            background: linear-gradient(135deg, #ff006e 0%, #8338ec 25%, #3a86ff 50%, #fb5607 75%, #ffbe0b 100%);
-            background-size: 400% 400%;
-            animation: gradient 20s ease infinite;
-            color: #000000;
-        }
-
-        /* SENIOR: Clean Corporate Healthcare */
-        .theme-senior { 
-            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #f8fafc 100%);
-            color: #1e293b;
-        }
-
-        /* Card Styles */
-        .card-teen { 
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border: 2px solid #00ff9d;
-            color: #ffffff;
-        }
-        .card-adult { 
-            background: #ffffff;
-            border: 6px solid #000000;
-            color: #000000;
-            position: relative;
-        }
-        .card-adult::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            right: -8px;
-            bottom: -8px;
-            background: #ff006e;
-            border: 6px solid #000000;
-            z-index: -1;
-        }
-        .card-senior { 
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            color: #1e293b;
-        }
-        
-        /* Accent Colors */
-        .accent-teen { 
-            color: #00ff9d; 
-            font-weight: 700;
-        }
-        .accent-adult { 
-            color: #8338ec; 
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .accent-senior { 
-            color: #0369a1; 
-            font-weight: 600;
-        }
-
-        /* Button Styles */
-        .btn-teen { 
-            background: #00ff9d;
-            color: #0f0f23;
-            border: 2px solid #00ff9d;
-            font-weight: 700;
-            transition: all 0.2s ease;
-        }
-        .btn-teen:hover { 
-            background: #00cc7d;
-            border-color: #00cc7d;
-        }
-        
-        .btn-adult { 
-            background: #000000;
-            color: #ffbe0b;
-            border: 6px solid #ffbe0b;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        .btn-adult::before {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            right: -6px;
-            bottom: -6px;
-            background: #ff006e;
-            border: 6px solid #000000;
-            z-index: -1;
-            transition: all 0.2s ease;
-        }
-        .btn-adult:hover::before { 
-            top: 3px;
-            left: 3px;
-            right: -3px;
-            bottom: -3px;
-        }
-        
-        .btn-senior { 
-            background: #0369a1;
-            color: #ffffff;
-            border: 2px solid #0369a1;
-            font-weight: 600;
-            letter-spacing: 0.025em;
-            transition: all 0.2s ease;
-        }
-        .btn-senior:hover { 
-            background: #075985;
-            border-color: #075985;
-        }
-        
-        /* Floating CTA */
-        .floating-cta {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @media (max-width: 768px) {
-            .floating-cta {
-                bottom: 1rem;
-                right: 1rem;
-                left: 1rem;
-            }
-        }
-
-        /* Range Input Styling */
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            background: currentColor;
-            cursor: pointer;
-            margin-top: -10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 6px;
-            cursor: pointer;
-            background: #e5e7eb;
-            border-radius: 3px;
+        .strike-through {
+            text-decoration: line-through;
+            text-decoration-thickness: 3px;
         }
     </style>
 </head>
@@ -255,7 +122,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // --- Icons as Components ---
+        // --- Icons ---
         const IconDollar = ({ className }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         );
@@ -268,107 +135,11 @@
         const IconArrowRight = ({ className }) => (
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         );
-        
-        // Product illustration icons - styled like the timeline projects
-        const IconVape = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="200" viewBox="0 0 50 200" className={className} style={{transform: 'scale(0.6)'}}>
-                {/* Mouthpiece */}
-                <rect x="10" y="0" width="30" height="20" rx="4" fill="currentColor" opacity="0.3"/>
-                {/* Cartridge with liquid */}
-                <rect x="11" y="20" width="28" height="80" fill="url(#vapeGradient)" opacity="0.8"/>
-                <defs>
-                    <linearGradient id="vapeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#FFD700" stopOpacity="0.6"/>
-                        <stop offset="100%" stopColor="#FFD700" stopOpacity="0.3"/>
-                    </linearGradient>
-                </defs>
-                {/* Coil */}
-                <rect x="10" y="100" width="30" height="8" fill="#FF4500" opacity="0.9">
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
-                </rect>
-                {/* Battery */}
-                <rect x="10" y="108" width="30" height="60" rx="0 0 4 4" fill="currentColor" opacity="0.4"/>
-                <circle cx="25" cy="120" r="3" fill="currentColor" opacity="0.8">
-                    <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
-                </circle>
-            </svg>
-        );
-        
-        const IconCigarette = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="200" viewBox="0 0 50 200" className={className} style={{transform: 'scale(0.6)'}}>
-                {/* Ash */}
-                <rect x="12" y="0" width="26" height="30" fill="#444">
-                    <animate attributeName="height" values="20;30;20" dur="3s" repeatCount="indefinite"/>
-                </rect>
-                {/* Ember */}
-                <rect x="10" y="30" width="30" height="5" fill="#FF4500">
-                    <animate attributeName="fill" values="#FF4500;#FF6347;#FF4500" dur="1s" repeatCount="indefinite"/>
-                </rect>
-                {/* Paper */}
-                <rect x="10" y="35" width="30" height="100" fill="#f4f4f4" stroke="#ddd" strokeWidth="1"/>
-                {/* Lines on paper */}
-                <line x1="10" y1="50" x2="40" y2="50" stroke="#e0e0e0" strokeWidth="0.5"/>
-                <line x1="10" y1="65" x2="40" y2="65" stroke="#e0e0e0" strokeWidth="0.5"/>
-                <line x1="10" y1="80" x2="40" y2="80" stroke="#e0e0e0" strokeWidth="0.5"/>
-                {/* Filter */}
-                <rect x="10" y="135" width="30" height="65" fill="#D9824F" rx="0 0 4 4"/>
-            </svg>
-        );
-        
-        const IconJoint = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="200" viewBox="0 0 70 200" className={className} style={{transform: 'scale(0.6)'}}>
-                <defs>
-                    <clipPath id="jointTaper">
-                        <polygon points="17,0 53,0 45,200 25,200"/>
-                    </clipPath>
-                </defs>
-                <g clipPath="url(#jointTaper)">
-                    {/* Ash */}
-                    <rect x="15" y="0" width="40" height="25" fill="#333">
-                        <animate attributeName="height" values="15;25;15" dur="3s" repeatCount="indefinite"/>
-                    </rect>
-                    {/* Ember */}
-                    <rect x="15" y="25" width="40" height="8" fill="#4CAF50">
-                        <animate attributeName="fill" values="#4CAF50;#66BB6A;#4CAF50" dur="1.5s" repeatCount="indefinite"/>
-                    </rect>
-                    {/* Paper */}
-                    <rect x="15" y="33" width="40" height="167" fill="#fafafa" stroke="#e8e8e8" strokeWidth="1"/>
-                    {/* Rolling paper lines */}
-                    <line x1="20" y1="50" x2="50" y2="55" stroke="#e0e0e0" strokeWidth="0.5" opacity="0.6"/>
-                    <line x1="20" y1="80" x2="50" y2="85" stroke="#e0e0e0" strokeWidth="0.5" opacity="0.6"/>
-                    <line x1="20" y1="110" x2="50" y2="115" stroke="#e0e0e0" strokeWidth="0.5" opacity="0.6"/>
-                    <line x1="20" y1="140" x2="50" y2="145" stroke="#e0e0e0" strokeWidth="0.5" opacity="0.6"/>
-                </g>
-            </svg>
-        );
-        
-        const IconPouch = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="200" viewBox="0 0 60 200" className={className} style={{transform: 'scale(0.6)'}}>
-                {/* Can body */}
-                <rect x="8" y="40" width="44" height="120" rx="2" fill="currentColor" opacity="0.3" stroke="currentColor" strokeWidth="2"/>
-                {/* Can top lid */}
-                <ellipse cx="30" cy="40" rx="22" ry="8" fill="currentColor" opacity="0.5"/>
-                <ellipse cx="30" cy="40" rx="18" ry="6" fill="currentColor" opacity="0.3"/>
-                {/* Can bottom */}
-                <ellipse cx="30" cy="160" rx="22" ry="8" fill="currentColor" opacity="0.4"/>
-                {/* Label area */}
-                <rect x="10" y="70" width="40" height="60" fill="currentColor" opacity="0.2" rx="1"/>
-                {/* Brand marking lines */}
-                <line x1="15" y1="85" x2="45" y2="85" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
-                <line x1="15" y1="95" x2="45" y2="95" stroke="currentColor" strokeWidth="3" opacity="0.7"/>
-                <line x1="15" y1="105" x2="45" y2="105" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
-                {/* Shine effect */}
-                <rect x="12" y="50" width="3" height="80" fill="#fff" opacity="0.3" rx="1"/>
-                <circle cx="30" cy="100" r="2" fill="currentColor" opacity="0.8">
-                    <animate attributeName="opacity" values="0.5;0.9;0.5" dur="2s" repeatCount="indefinite"/>
-                </circle>
-            </svg>
-        );
 
         // --- Data Dictionary ---
         const DATA = {
             "14-18": {
-                theme: "teen",
+                theme: "theme-teen",
                 label: "The Freedom Years",
                 tagline: "Your money = Your independence.",
                 products: {
@@ -379,7 +150,7 @@
                 }
             },
             "18-35": {
-                theme: "adult",
+                theme: "theme-adult",
                 label: "The Building Years",
                 tagline: "Stop delaying your biggest milestones.",
                 products: {
@@ -390,7 +161,7 @@
                 }
             },
             "35-65": {
-                theme: "senior",
+                theme: "theme-senior",
                 label: "The Legacy Years",
                 tagline: "Protect your wealth and your health.",
                 products: {
@@ -412,96 +183,65 @@
         const App = () => {
             const [ageGroup, setAgeGroup] = React.useState("14-18");
             const [product, setProduct] = React.useState("vape");
-            const [spend, setSpend] = React.useState(15); // Daily spend
-            const [spendFreq, setSpendFreq] = React.useState("daily"); // daily, weekly
-            const [customGoal, setCustomGoal] = React.useState("");
+            const [spend, setSpend] = React.useState(15); 
+            const [spendFreq, setSpendFreq] = React.useState("daily");
 
             // Derived Data
             const currentData = DATA[ageGroup];
             const currentProductData = currentData.products[product];
             const themeClass = currentData.theme;
-            const cardClass = `card-${themeClass.split('-')[1]}`;
-            const btnClass = `btn-${themeClass.split('-')[1]}`;
-            const textAccent = `accent-${themeClass.split('-')[1]}`;
+            const themeKey = themeClass.split('-')[1]; // teen, adult, senior
+            const cardClass = `card-${themeKey}`;
+            const btnClass = `btn-${themeKey}`;
+            const textAccent = `accent-${themeKey}`;
 
             // Calculation Logic
             const dailyCost = spendFreq === "daily" ? spend : spend / 7;
             const monthlySavings = dailyCost * 30;
             const yearlySavings = dailyCost * 365;
             
-            // For the progress bar/goal
+            // For the progress bar
             const goalPrice = currentProductData.price;
             const daysToGoal = Math.ceil(goalPrice / dailyCost);
             const progress = Math.min((yearlySavings / goalPrice) * 100, 100);
 
-            // Share Handler - Captures postcard as image
-            const handleShare = async () => {
-                const postcardElement = document.getElementById('postcard');
-                if (!postcardElement) return;
-                
-                try {
-                    // Capture the card as canvas
-                    const canvas = await html2canvas(postcardElement, {
-                        backgroundColor: null,
-                        scale: 2, // Higher quality
-                        logging: false,
-                        useCORS: true
-                    });
-                    
-                    // Convert to blob
-                    canvas.toBlob(async (blob) => {
-                        // Try native share API first (mobile)
-                        if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'quit-to-win.png', { type: 'image/png' })] })) {
-                            const file = new File([blob], 'quit-to-win-card.png', { type: 'image/png' });
-                            try {
-                                await navigator.share({
-                                    files: [file],
-                                    title: 'My Quit to Win Results',
-                                    text: `I'm saving $${yearlySavings.toLocaleString()} a year by quitting ${PRODUCT_LABELS[product]}!`
-                                });
-                            } catch (err) {
-                                if (err.name !== 'AbortError') {
-                                    downloadImage(canvas);
-                                }
-                            }
-                        } else {
-                            // Fallback: download the image
-                            downloadImage(canvas);
-                        }
-                    }, 'image/png');
-                } catch (error) {
-                    console.error('Error capturing card:', error);
-                    alert('Unable to capture card. Try again!');
-                }
-            };
-            
-            const downloadImage = (canvas) => {
-                const link = document.createElement('a');
-                link.download = 'quit-to-win-card.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                alert('Card image downloaded! Share it on social media.');
+            // Progress Bar Color Logic
+            const progressBarColor = 
+                themeKey === 'teen' ? 'bg-[#00ff9d]' : 
+                themeKey === 'adult' ? 'bg-yellow-400' : 
+                'bg-[#0369a1]';
+
+            const handleCopy = () => {
+                const text = `I just calculated that quitting ${PRODUCT_LABELS[product]} saves me $${yearlySavings.toLocaleString()} a year! That's enough for ${currentProductData.item} ${currentProductData.emoji}. Check your stats here:`;
+                navigator.clipboard.writeText(text);
+                alert("Postcard text copied to clipboard! Share it with a friend.");
             };
 
             return (
-                <div className={`min-h-screen transition-colors duration-700 grain relative theme-${currentData.theme}`}>
+                <div className={`min-h-screen transition-all duration-700 ${themeClass} ${themeKey === 'teen' ? 'bg-grid-pattern' : ''} font-sans`}>
                     
-                    {/* Navigation / Header */}
+                    {/* Header */}
                     <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
                         <div className="flex items-center gap-2">
-                            <div className={`p-2 rounded-lg ${currentData.theme === 'teen' ? 'bg-gradient-to-br from-emerald-400 to-cyan-400' : currentData.theme === 'adult' ? 'bg-black border-4 border-yellow-300' : 'bg-sky-600'}`}>
-                                <IconDollar className={`w-6 h-6 ${currentData.theme === 'teen' ? 'text-slate-900' : 'text-white'}`} />
+                            <div className={`p-2 rounded-lg ${themeKey === 'teen' ? 'bg-[#00ff9d] text-black' : themeKey === 'adult' ? 'bg-black text-white border-2 border-yellow-400' : 'bg-[#0369a1] text-white'}`}>
+                                <IconDollar className="w-6 h-6" />
                             </div>
-                            <span className={`text-2xl font-bold brand-font tracking-tight ${currentData.theme === 'teen' ? 'text-white' : currentData.theme === 'adult' ? 'text-white font-black' : 'text-slate-900'}`}>Quit<span className={textAccent}>&</span>Win</span>
+                            <span className={`text-2xl font-bold font-grotesk tracking-tight ${themeKey === 'adult' ? 'uppercase italic' : ''}`}>
+                                Quit<span className={textAccent}>&</span>Win
+                            </span>
                         </div>
                         
                         {/* Age Selector */}
-                        <div className={`flex rounded-full p-1 ${currentData.theme === 'teen' ? 'bg-slate-800/50 backdrop-blur-sm border-2 border-emerald-400' : currentData.theme === 'adult' ? 'bg-black border-4 border-yellow-300' : 'bg-white border-2 border-slate-200'}`}>
+                        <div className={`flex p-1 gap-1 ${themeKey === 'senior' ? 'bg-slate-200 rounded-lg' : themeKey === 'teen' ? 'bg-slate-800/50 rounded-none border border-[#00ff9d]' : 'bg-black/10 rounded-none border-2 border-black'}`}>
                             {Object.keys(DATA).map((age) => (
                                 <button
                                     key={age}
                                     onClick={() => setAgeGroup(age)}
-                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${ageGroup === age ? (currentData.theme === 'teen' ? 'bg-emerald-400 text-slate-900' : currentData.theme === 'adult' ? 'bg-yellow-300 text-black font-black' : 'bg-sky-600 text-white') : (currentData.theme === 'teen' ? 'text-emerald-400 hover:text-emerald-300' : currentData.theme === 'adult' ? 'text-yellow-300 hover:text-yellow-200 font-bold' : 'text-slate-600 hover:text-sky-600')}`}
+                                    className={`px-4 py-2 text-sm font-bold transition-all duration-300
+                                        ${ageGroup === age 
+                                            ? (themeKey === 'teen' ? 'bg-[#00ff9d] text-black' : themeKey === 'adult' ? 'bg-black text-white' : 'bg-white text-[#0369a1] shadow-sm rounded-md') 
+                                            : 'opacity-70 hover:opacity-100'
+                                        }`}
                                 >
                                     {age}
                                 </button>
@@ -509,16 +249,19 @@
                         </div>
                     </nav>
 
-                    {/* Hero Section */}
+                    {/* Hero */}
                     <header className="max-w-4xl mx-auto text-center mt-12 px-4 relative z-10">
-                        <span className={`inline-block py-2 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${currentData.theme === 'teen' ? 'bg-emerald-400 text-slate-900 border-2 border-emerald-400' : currentData.theme === 'adult' ? 'bg-black text-yellow-300 border-4 border-yellow-300 font-black' : 'bg-sky-600 text-white'}`}>
+                        <span className={`inline-block py-1 px-4 mb-4 text-xs font-bold uppercase tracking-widest
+                            ${themeKey === 'teen' ? 'border border-[#00ff9d] text-[#00ff9d] font-tech' : 
+                              themeKey === 'adult' ? 'bg-yellow-400 text-black border-2 border-black rotate-1' : 
+                              'bg-sky-100 text-sky-800 rounded-full'}`}>
                             {currentData.label}
                         </span>
-                        <h1 className={`text-5xl md:text-7xl font-bold mb-6 leading-tight ${currentData.theme === 'teen' ? 'text-white' : currentData.theme === 'adult' ? 'text-white font-black' : 'text-slate-900'}`}>
+                        <h1 className={`text-5xl md:text-7xl font-bold mb-6 leading-tight font-grotesk ${themeKey === 'adult' ? 'uppercase italic drop-shadow-[4px_4px_0_rgba(0,0,0,0.2)]' : ''}`}>
                             Your habit costs <br/>
                             <span className={textAccent}>more than money.</span>
                         </h1>
-                        <p className={`text-xl max-w-2xl mx-auto mb-10 ${currentData.theme === 'teen' ? 'text-white/90' : currentData.theme === 'adult' ? 'text-white font-bold' : 'text-slate-700'}`}>
+                        <p className={`text-xl opacity-90 max-w-2xl mx-auto mb-10 ${themeKey === 'teen' ? 'font-tech' : ''}`}>
                             {currentData.tagline}
                         </p>
 
@@ -528,95 +271,79 @@
                                 <button
                                     key={key}
                                     onClick={() => setProduct(key)}
-                                    className={`px-6 py-3 rounded-xl border-2 font-semibold transition-all relative overflow-hidden ${product === key ? `${btnClass} border-transparent shadow-2xl transform scale-105` : `border-gray-600 bg-transparent hover:border-gray-400 opacity-50 hover:opacity-75`}`}
+                                    className={`px-6 py-3 font-bold transition-all 
+                                        ${product === key 
+                                            ? `${btnClass} transform scale-105` 
+                                            : `border-2 border-current bg-transparent opacity-60 hover:opacity-100 ${themeKey === 'senior' ? 'rounded-md' : ''}`
+                                        }`}
                                 >
-                                    {product === key && <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></span>}
-                                    <span className="relative z-10">{label}</span>
+                                    {label}
                                 </button>
                             ))}
                         </div>
                     </header>
 
-                    {/* Product Icons Section */}
-                    <section className="max-w-5xl mx-auto px-4 mb-16 relative z-10">
-                        <div className="flex justify-center items-center gap-8 md:gap-16 py-8">
-                            <div className={`transition-all duration-500 cursor-pointer ${product === 'vape' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('vape')}>
-                                <IconVape className="w-16 h-32" />
-                            </div>
-                            <div className={`transition-all duration-500 cursor-pointer ${product === 'cigs' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('cigs')}>
-                                <IconCigarette className="w-16 h-32" />
-                            </div>
-                            <div className={`transition-all duration-500 cursor-pointer ${product === 'weed' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('weed')}>
-                                <IconJoint className="w-16 h-32" />
-                            </div>
-                            <div className={`transition-all duration-500 cursor-pointer ${product === 'pouch' ? `${textAccent} scale-150 opacity-100` : 'opacity-15 scale-75 hover:opacity-30 hover:scale-90'}`} onClick={() => setProduct('pouch')}>
-                                <IconPouch className="w-16 h-32" />
-                            </div>
-                        </div>
-                    </section>
-
                     {/* Main Grid */}
-                    <main className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 pb-12">
+                    <main className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 pb-12 relative z-10">
                         
                         {/* Left: Calculator Input */}
-                        <div className={`p-8 rounded-3xl ${currentData.theme === 'adult' ? 'bg-white shadow-xl' : 'bg-white/5 border border-white/10'}`}>
-                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <div className={`p-8 ${cardClass} ${themeKey === 'senior' ? 'rounded-2xl' : themeKey === 'teen' ? 'rounded-none' : 'rounded-none'}`}>
+                            <h2 className={`text-2xl font-bold mb-8 flex items-center gap-3 font-grotesk ${themeKey === 'adult' ? 'uppercase' : ''}`}>
                                 <IconTarget className={textAccent} />
-                                Calculate Your Savings
+                                Calculate Savings
                             </h2>
                             
                             <div className="space-y-8">
                                 <div>
-                                    <label className="block text-sm font-medium mb-2 opacity-70">
-                                        How much do you spend?
+                                    <label className={`block text-sm font-bold mb-4 opacity-80 ${themeKey === 'teen' ? 'font-tech uppercase' : ''}`}>
+                                        Daily Spend
                                     </label>
                                     <div className="flex items-center gap-4">
-                                        <span className="text-3xl font-bold">${spend}</span>
+                                        <span className={`text-4xl font-bold ${themeKey === 'teen' ? 'font-tech' : ''}`}>${spend}</span>
                                         <input 
                                             type="range" 
                                             min="1" 
                                             max="100" 
                                             value={spend} 
                                             onChange={(e) => setSpend(Number(e.target.value))}
-                                            className={`flex-1 h-2 rounded-lg appearance-none cursor-pointer ${textAccent}`}
+                                            className={`flex-1 h-2 appearance-none cursor-pointer bg-current opacity-30 rounded-full`}
+                                            style={{accentColor: themeKey === 'teen' ? '#00ff9d' : themeKey === 'adult' ? '#000' : '#0369a1'}}
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium mb-2 opacity-70">
+                                    <label className={`block text-sm font-bold mb-4 opacity-80 ${themeKey === 'teen' ? 'font-tech uppercase' : ''}`}>
                                         Frequency
                                     </label>
                                     <div className="flex gap-4">
-                                        <button 
-                                            onClick={() => setSpendFreq('daily')}
-                                            className={`flex-1 py-3 rounded-lg border ${spendFreq === 'daily' ? `${textAccent} border-current bg-current/10` : 'border-gray-600 opacity-50'}`}
-                                        >
-                                            Daily
-                                        </button>
-                                        <button 
-                                            onClick={() => setSpendFreq('weekly')}
-                                            className={`flex-1 py-3 rounded-lg border ${spendFreq === 'weekly' ? `${textAccent} border-current bg-current/10` : 'border-gray-600 opacity-50'}`}
-                                        >
-                                            Weekly
-                                        </button>
+                                        {['daily', 'weekly'].map(freq => (
+                                            <button 
+                                                key={freq}
+                                                onClick={() => setSpendFreq(freq)}
+                                                className={`flex-1 py-3 font-bold capitalize border-2
+                                                    ${spendFreq === freq 
+                                                        ? `${themeKey === 'adult' ? 'bg-black text-white border-black' : themeKey === 'teen' ? 'bg-[#00ff9d]/20 border-[#00ff9d] text-[#00ff9d]' : 'bg-sky-50 border-[#0369a1] text-[#0369a1] rounded-md'}` 
+                                                        : 'border-current opacity-40 hover:opacity-70 bg-transparent'}`}
+                                            >
+                                                {freq}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
 
-                                <div className="pt-6 border-t border-gray-700/20">
+                                <div className="pt-8 border-t border-current/10">
                                     <div className="grid grid-cols-3 gap-4 text-center">
-                                        <div className="p-4 rounded-2xl bg-black/5">
-                                            <div className="text-xs opacity-60 uppercase mb-1">1 Month</div>
-                                            <div className={`text-xl font-bold ${textAccent}`}>${Math.round(monthlySavings).toLocaleString()}</div>
-                                        </div>
-                                        <div className={`p-4 rounded-2xl ${currentData.theme === 'teen' ? 'bg-green-500/20' : currentData.theme === 'adult' ? 'bg-blue-100' : 'bg-amber-500/20'}`}>
-                                            <div className="text-xs opacity-60 uppercase mb-1">1 Year</div>
-                                            <div className={`text-2xl font-bold ${textAccent}`}>${Math.round(yearlySavings).toLocaleString()}</div>
-                                        </div>
-                                        <div className="p-4 rounded-2xl bg-black/5">
-                                            <div className="text-xs opacity-60 uppercase mb-1">10 Years</div>
-                                            <div className={`text-xl font-bold ${textAccent}`}>${Math.round(yearlySavings * 10).toLocaleString()}</div>
-                                        </div>
+                                        {[
+                                            { label: '1 Month', val: monthlySavings },
+                                            { label: '1 Year', val: yearlySavings, highlight: true },
+                                            { label: '10 Years', val: yearlySavings * 10 }
+                                        ].map((stat, i) => (
+                                            <div key={i} className={`p-4 ${stat.highlight ? (themeKey === 'senior' ? 'bg-sky-50 rounded-xl' : themeKey === 'teen' ? 'bg-[#00ff9d]/10 border border-[#00ff9d]' : 'bg-yellow-300 border-2 border-black text-black') : 'opacity-80'}`}>
+                                                <div className={`text-xs opacity-70 uppercase mb-1 font-bold ${themeKey === 'teen' ? 'font-tech' : ''}`}>{stat.label}</div>
+                                                <div className={`text-xl font-bold ${themeKey === 'teen' ? 'font-tech' : ''}`}>${Math.round(stat.val).toLocaleString()}</div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -624,37 +351,37 @@
 
                         {/* Right: The Postcard Preview */}
                         <div className="flex flex-col items-center">
-                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 font-grotesk ${themeKey === 'adult' ? 'uppercase' : ''}`}>
                                 <IconShare className={textAccent} />
                                 Your Reality Check
                             </h2>
 
                             {/* THE POSTCARD */}
-                            <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
-                                {/* Decorative BG Elements */}
-                                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-10 rounded-bl-full ${textAccent}`}></div>
+                            <div className={`relative w-full max-w-md aspect-[4/5] p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group ${themeKey === 'senior' ? 'rounded-2xl' : ''}`}>
                                 
                                 <div>
                                     <div className="flex justify-between items-start mb-8">
-                                        <div className={`font-black text-lg tracking-tighter uppercase brand-font italic leading-none`}>
+                                        <div className={`font-black text-lg tracking-tighter uppercase font-grotesk italic leading-none opacity-80`}>
                                             Kick It <br/>
                                             <span className={`${textAccent} font-medium tracking-normal not-italic`}>California</span>
                                         </div>
-                                        <span className="text-5xl animate-float">
+                                        <span className="text-6xl animate-float drop-shadow-xl">
                                             {currentProductData.emoji}
                                         </span>
                                     </div>
                                     
-                                    <h3 className="text-3xl font-bold mb-2 leading-tight">
-                                        I'm trading <br/>
-                                        <span className="opacity-50 strike-through decoration-2 line-through decoration-red-500">{PRODUCT_LABELS[product]}</span>
-                                    </h3>
-                                    <h3 className={`text-3xl font-bold mb-6 ${textAccent}`}>
-                                        for {currentProductData.item}
-                                    </h3>
+                                    <div className={`space-y-2 ${themeKey === 'adult' ? 'font-black uppercase italic' : 'font-bold'}`}>
+                                        <h3 className="text-3xl leading-tight opacity-50">
+                                            I'm trading <br/>
+                                            <span className="strike-through decoration-red-500 decoration-4">{PRODUCT_LABELS[product]}</span>
+                                        </h3>
+                                        <h3 className={`text-4xl leading-tight ${textAccent}`}>
+                                            for {currentProductData.item}
+                                        </h3>
+                                    </div>
 
-                                    <p className="text-sm opacity-80 leading-relaxed">
-                                        By quitting now, I save <span className="font-bold border-b border-current">${Math.round(yearlySavings).toLocaleString()}</span> this year alone. 
+                                    <p className={`mt-6 text-sm opacity-80 leading-relaxed ${themeKey === 'teen' ? 'font-tech' : ''}`}>
+                                        By quitting now, I save <span className="font-bold border-b-2 border-current">${Math.round(yearlySavings).toLocaleString()}</span> this year alone. 
                                         {daysToGoal < 365 ? 
                                             ` I can afford this goal in just ${daysToGoal} days.` : 
                                             ` That's a huge step toward financial freedom.`}
@@ -662,65 +389,64 @@
                                 </div>
 
                                 <div>
-                                    <div className="w-full h-2 bg-gray-200/20 rounded-full mb-4 overflow-hidden">
+                                    <div className={`w-full h-4 mb-4 overflow-hidden ${themeKey === 'senior' ? 'rounded-full bg-gray-100' : 'bg-black/10 border border-current'}`}>
                                         <div 
-                                            className={`h-full transition-all duration-1000 ease-out ${currentData.theme === 'teen' ? 'bg-green-500' : currentData.theme === 'adult' ? 'bg-blue-600' : 'bg-amber-400'}`} 
+                                            className={`h-full transition-all duration-1000 ease-out ${progressBarColor}`} 
                                             style={{ width: `${progress}%` }}
                                         ></div>
                                     </div>
-                                    <div className="flex justify-between text-xs opacity-60 font-mono">
+                                    <div className={`flex justify-between text-xs font-bold opacity-60 ${themeKey === 'teen' ? 'font-tech' : ''}`}>
                                         <span>$0</span>
                                         <span>GOAL: ${goalPrice.toLocaleString()}</span>
                                     </div>
                                 </div>
                                 
-                                {/* Hover Effect Overlay for sharing */}
-                                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                {/* Hover Effect Overlay */}
+                                <div className={`absolute inset-0 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center ${themeKey === 'senior' ? 'bg-white/60 rounded-2xl' : 'bg-black/60'}`}>
                                     <button 
-                                        onClick={handleShare}
-                                        className="bg-white text-black px-6 py-3 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform flex items-center gap-2 hover:bg-gray-100"
+                                        onClick={handleCopy}
+                                        className={`px-8 py-4 font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform ${btnClass}`}
                                     >
-                                        <IconShare className="w-4 h-4" />
-                                        Share Image
+                                        <IconShare className="w-5 h-5" />
+                                        Copy & Share
                                     </button>
                                 </div>
                             </div>
-                            
-                            <p className="mt-6 text-sm opacity-50 text-center">
-                                Hover card to share your win. <br/>Based on avg prices in US (2025).
-                            </p>
                         </div>
                     </main>
 
-                    {/* Floating CTA */}
-                    <div className="floating-cta">
-                        <div className={`p-6 rounded-2xl text-center shadow-2xl border backdrop-blur-sm transition-colors duration-500 ${currentData.theme === 'adult' ? 'bg-blue-50/95 border-blue-200' : 'bg-gray-900/95 border-white/20'}`}>
-                            <div className="flex justify-center mb-3">
+                    {/* CTA Section */}
+                    <section className="max-w-4xl mx-auto px-4 mb-20 relative z-10">
+                        <div className={`p-8 md:p-12 text-center transition-colors duration-500 
+                            ${cardClass}
+                            ${themeKey === 'senior' ? 'rounded-3xl' : ''}`}>
+                            
+                            <div className="flex justify-center mb-6">
                                 <img 
                                     src="https://kicform.org/hs-fs/hubfs/kic%20logo2.png?width=118&height=40&name=kic%20logo2.png" 
                                     alt="Kick It California Logo" 
-                                    className="h-8 object-contain"
+                                    className="h-12 object-contain" 
                                 />
                             </div>
-                            <h3 className="text-xl font-bold mb-2">
-                                Ready to quit?
-                            </h3>
-                            <p className="text-sm opacity-80 mb-4 max-w-xs">
-                                Get free, personalized support now.
+                            <h2 className={`text-3xl md:text-4xl font-bold mb-4 font-grotesk ${themeKey === 'adult' ? 'uppercase italic' : ''}`}>
+                                Ready to make this real?
+                            </h2>
+                            <p className="text-lg opacity-80 mb-8 max-w-xl mx-auto">
+                                You've done the math. Now take the first step. Kick It California provides free, personalized support to help you quit for good.
                             </p>
                             <a 
                                 href="https://kicform.org/kick-it-2" 
                                 target="_blank"
-                                className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-transform hover:scale-105 ${btnClass}`}
+                                className={`inline-flex items-center gap-3 px-8 py-4 text-lg font-bold transition-transform hover:scale-105 ${btnClass}`}
                             >
                                 Kick It Now
-                                <IconArrowRight className="w-4 h-4" />
+                                <IconArrowRight className="w-5 h-5" />
                             </a>
                         </div>
-                    </div>
+                    </section>
 
                     {/* Footer */}
-                    <footer className={`py-12 text-center border-t ${currentData.theme === 'adult' ? 'border-gray-200' : 'border-gray-800'}`}>
+                    <footer className={`py-12 text-center border-t relative z-10 ${themeKey === 'adult' ? 'border-black bg-white' : themeKey === 'teen' ? 'border-[#00ff9d]/20 bg-[#020617]' : 'border-gray-200 bg-white'}`}>
                         <p className="opacity-40 text-sm">
                             Kick It California is a free program of UC San Diego.<br/>
                             Disclaimer: Estimates only. Prices vary by state.
