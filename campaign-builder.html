@@ -525,19 +525,14 @@
 
                             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                                 {tips.map((tip, i) => (
-                                    <button
+                                    <div
                                         key={i}
-                                        onClick={() => setCurrentTipIndex(i)}
-                                        className={`p-4 rounded-xl transition-all border-2 text-left cursor-pointer ${
-                                            i === currentTipIndex 
-                                                ? 'bg-accent/20 border-accent shadow-lg' 
-                                                : 'bg-white/30 border-transparent hover:bg-white/50 hover:border-accent/30'
-                                        }`}
+                                        className="p-4 rounded-xl transition-all border-2 text-left bg-white/30 border-transparent hover:bg-accent/10 hover:border-accent/30 cursor-default"
                                     >
                                         <div className="text-3xl mb-2">{tip.icon}</div>
                                         <div className="font-bold text-sm mb-1">{tip.title}</div>
                                         <div className="text-xs opacity-70 leading-tight">{tip.tip}</div>
-                                    </button>
+                                    </div>
                                 ))}
                             </div>
                         </section>
