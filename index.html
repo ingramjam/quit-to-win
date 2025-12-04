@@ -235,6 +235,12 @@
                     { time: "2 Weeks", benefit: "Lung capacity up. Sports stats improve." },
                     { time: "1 Month", benefit: "Anxiety spikes gone. Focus locked in." }
                 ],
+                proofPoints: [
+                    "100% Free Service",
+                    "Proven to Double Success",
+                    "No Judgment Zone",
+                    "Private & Confidential"
+                ],
                 services: [
                     { label: "Download App", sub: "Gamify your quit", icon: <IconDownload/>, action: "App Store" },
                     { label: "Text Us", sub: "Discreet support", icon: <IconChat/>, action: "Text 'QUIT' to 66819" },
@@ -295,6 +301,12 @@
                     { time: "1 Year", benefit: "Risk of heart attack cut in half." },
                     { time: "5 Years", benefit: "Stroke risk equals non-smoker." },
                     { time: "10 Years", benefit: "Lung cancer risk reduced by 50%." }
+                ],
+                proofPoints: [
+                    "100% Free Service",
+                    "Trusted by Doctors",
+                    "Science-Based Methods",
+                    "Private & Confidential"
                 ],
                 services: [
                     { label: "Call a Coach", sub: "1-800-300-8086", icon: <IconPhone/>, action: "Call Now" },
@@ -436,69 +448,68 @@
                     </header>
 
                     {/* --- CALCULATOR SECTION --- */}
-                    <main className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 pb-20 relative z-10 items-start">
+                    <main className="max-w-6xl mx-auto px-4 pb-20 relative z-10">
                         
-                        {/* LEFT: Calculator */}
-                        <div className={`p-8 ${cardClass} flex flex-col justify-center`}>
-                            <div className={`${themeKey === 'adult' ? 'bg-[#000080] text-white p-2 mb-6 font-bold flex justify-between' : ''}`}>
-                                <h2 className={`text-2xl font-bold flex items-center gap-3 ${themeKey === 'teen' ? 'font-tech uppercase' : themeKey === 'adult' ? 'font-serif-retro' : 'font-sans'}`}>
-                                    <IconTarget/>
-                                    Calculate Savings
-                                    {themeKey === 'adult' && ".exe"}
-                                </h2>
-                                {themeKey === 'adult' && <span className="border border-white px-2 bg-[#c0c0c0] text-black">X</span>}
-                            </div>
-                            
-                            <div className="space-y-10">
-                                <div>
-                                    <div className="flex justify-between mb-4">
-                                        <label className={`text-sm font-bold opacity-80 ${themeKey === 'teen' ? 'font-tech' : ''}`}>DAILY SPEND</label>
-                                        <span className={`text-4xl font-bold ${textAccent} ${themeKey === 'teen' ? 'font-tech' : ''}`}>${spend}</span>
-                                    </div>
-                                    <input 
-                                        type="range" 
-                                        min="1" 
-                                        max="100" 
-                                        value={spend} 
-                                        onChange={(e) => setSpend(Number(e.target.value))}
-                                        className={`w-full h-2 rounded-lg appearance-none cursor-pointer`}
-                                        style={{
-                                            background: themeKey === 'teen' ? '#1e293b' : themeKey === 'adult' ? '#fff' : '#e2e8f0',
-                                            border: themeKey === 'adult' ? '2px inset #808080' : 'none',
-                                            color: thumbColor
-                                        }}
-                                    />
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <button 
-                                        onClick={() => setSpendFreq('daily')}
-                                        className={`py-3 font-bold border-2 transition-colors ${spendFreq === 'daily' ? (themeKey==='teen'?'bg-[#00ff9d] text-black border-[#00ff9d]':themeKey==='adult'?'bg-[#000080] text-white border-white shadow-inner':'bg-blue-100 border-blue-200 text-blue-800 rounded') : 'border-current opacity-30 bg-transparent'}`}
-                                    >
-                                        Daily
-                                    </button>
-                                    <button 
-                                        onClick={() => setSpendFreq('weekly')}
-                                        className={`py-3 font-bold border-2 transition-colors ${spendFreq === 'weekly' ? (themeKey==='teen'?'bg-[#00ff9d] text-black border-[#00ff9d]':themeKey==='adult'?'bg-[#000080] text-white border-white shadow-inner':'bg-blue-100 border-blue-200 text-blue-800 rounded') : 'border-current opacity-30 bg-transparent'}`}
-                                    >
-                                        Weekly
-                                    </button>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                            {/* LEFT: Calculator */}
+                            <div className={`p-8 ${cardClass} flex flex-col justify-center`}>
+                                <div className={`${themeKey === 'adult' ? 'bg-[#000080] text-white p-2 mb-6 font-bold flex justify-between' : ''}`}>
+                                    <h2 className={`text-2xl font-bold flex items-center gap-3 ${themeKey === 'teen' ? 'font-tech uppercase' : themeKey === 'adult' ? 'font-serif-retro' : 'font-sans'}`}>
+                                        <IconTarget/>
+                                        Calculate Savings
+                                        {themeKey === 'adult' && ".exe"}
+                                    </h2>
+                                    {themeKey === 'adult' && <span className="border border-white px-2 bg-[#c0c0c0] text-black">X</span>}
                                 </div>
                                 
-                                {/* Quick Stats */}
-                                <div className={`p-6 text-center border-t border-current/10 ${themeKey === 'teen' ? 'bg-[#00ff9d]/5' : themeKey === 'adult' ? 'card-adult-inset' : ''}`}>
-                                    <div className="text-sm opacity-60 mb-1">YEARLY SAVINGS</div>
-                                    <div className={`text-5xl font-bold ${textAccent} ${themeKey === 'teen' ? 'font-tech' : ''}`}>
-                                        ${Math.round(yearlySavings).toLocaleString()}
+                                <div className="space-y-10">
+                                    <div>
+                                        <div className="flex justify-between mb-4">
+                                            <label className={`text-sm font-bold opacity-80 ${themeKey === 'teen' ? 'font-tech' : ''}`}>DAILY SPEND</label>
+                                            <span className={`text-4xl font-bold ${textAccent} ${themeKey === 'teen' ? 'font-tech' : ''}`}>${spend}</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="100" 
+                                            value={spend} 
+                                            onChange={(e) => setSpend(Number(e.target.value))}
+                                            className={`w-full h-2 rounded-lg appearance-none cursor-pointer`}
+                                            style={{
+                                                background: themeKey === 'teen' ? '#1e293b' : themeKey === 'adult' ? '#fff' : '#e2e8f0',
+                                                border: themeKey === 'adult' ? '2px inset #808080' : 'none',
+                                                color: thumbColor
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <button 
+                                            onClick={() => setSpendFreq('daily')}
+                                            className={`py-3 font-bold border-2 transition-colors ${spendFreq === 'daily' ? (themeKey==='teen'?'bg-[#00ff9d] text-black border-[#00ff9d]':themeKey==='adult'?'bg-[#000080] text-white border-white shadow-inner':'bg-blue-100 border-blue-200 text-blue-800 rounded') : 'border-current opacity-30 bg-transparent'}`}
+                                        >
+                                            Daily
+                                        </button>
+                                        <button 
+                                            onClick={() => setSpendFreq('weekly')}
+                                            className={`py-3 font-bold border-2 transition-colors ${spendFreq === 'weekly' ? (themeKey==='teen'?'bg-[#00ff9d] text-black border-[#00ff9d]':themeKey==='adult'?'bg-[#000080] text-white border-white shadow-inner':'bg-blue-100 border-blue-200 text-blue-800 rounded') : 'border-current opacity-30 bg-transparent'}`}
+                                        >
+                                            Weekly
+                                        </button>
+                                    </div>
+                                    
+                                    {/* Quick Stats */}
+                                    <div className={`p-6 text-center border-t border-current/10 ${themeKey === 'teen' ? 'bg-[#00ff9d]/5' : themeKey === 'adult' ? 'card-adult-inset' : ''}`}>
+                                        <div className="text-sm opacity-60 mb-1">YEARLY SAVINGS</div>
+                                        <div className={`text-5xl font-bold ${textAccent} ${themeKey === 'teen' ? 'font-tech' : ''}`}>
+                                            ${Math.round(yearlySavings).toLocaleString()}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* RIGHT: Visualizer Card & Health Stats */}
-                        <div className="flex flex-col gap-8">
-                             {/* The Postcard/Browser Window */}
-                             <div className={`relative p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
+                            {/* RIGHT: Visualizer Card */}
+                            <div className={`relative p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
                                 {themeKey === 'adult' && (
                                     <div className="bg-[#000080] text-white px-2 py-1 mb-4 flex justify-between items-center font-bold font-serif-retro border border-white">
                                         <span>Result.html</span>
@@ -549,40 +560,50 @@
                                     </div>
                                 </div>
                             </div>
-
-                            {/* --- UNIVERSAL HEALTH TIMELINE (Customized per Age) --- */}
-                            <div className={`${cardClass} p-6`}>
-                                <div className={`p-2 mb-4 font-bold flex items-center gap-2
-                                    ${themeKey === 'teen' ? 'bg-[#00ff9d]/20 text-[#00ff9d] border-b border-[#00ff9d] font-tech uppercase' : 
-                                      themeKey === 'adult' ? 'bg-[#000080] text-white font-serif-retro' : 
-                                      'text-[#0284c7] border-b border-blue-100 font-sans'}`}>
-                                    <IconHeart/> 
-                                    {themeKey === 'teen' ? 'System Diagnostics' : themeKey === 'adult' ? 'Health_Log.txt' : 'Health Timeline'}
-                                </div>
-                                <ul className={`space-y-4 ${themeKey === 'teen' ? 'font-tech text-sm' : themeKey === 'adult' ? 'font-serif-retro' : 'font-sans'}`}>
-                                    {currentData.healthTimeline && currentData.healthTimeline.map((item, i) => (
-                                        <li key={i} className={`flex gap-4 items-center pb-2 last:border-0 border-b border-current/10`}>
-                                            <div className={`font-bold w-24 shrink-0 ${textAccent}`}>{item.time}</div>
-                                            <div className="opacity-80">{item.benefit}</div>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            {/* --- 18-35 EXCLUSIVE: PROOF POINTS --- */}
-                            {themeKey === 'adult' && currentData.proofPoints && (
-                                <div className={`${cardClass} p-6`}>
-                                    <div className="bg-[#008080] text-white p-2 mb-4 font-bold font-serif-retro">
-                                        Why_Trust_Us?
-                                    </div>
-                                    <ul className="list-disc pl-6 font-serif-retro text-lg">
-                                        {currentData.proofPoints.map((point, i) => (
-                                            <li key={i} className="mb-2">{point}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
                         </div>
+
+                        {/* --- FULL WIDTH: HEALTH TIMELINE --- */}
+                        <div className={`${cardClass} p-8 mb-12`}>
+                            <div className={`p-2 mb-6 font-bold flex items-center gap-2 justify-center text-xl
+                                ${themeKey === 'teen' ? 'bg-[#00ff9d]/20 text-[#00ff9d] border-b border-[#00ff9d] font-tech uppercase' : 
+                                  themeKey === 'adult' ? 'bg-[#000080] text-white font-serif-retro' : 
+                                  'text-[#0284c7] border-b border-blue-100 font-sans'}`}>
+                                <IconHeart/> 
+                                {themeKey === 'teen' ? 'System Diagnostics' : themeKey === 'adult' ? 'Health_Log.txt' : 'Health Timeline'}
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {currentData.healthTimeline && currentData.healthTimeline.map((item, i) => (
+                                    <div key={i} className={`flex gap-4 items-center p-4 rounded ${themeKey === 'teen' ? 'bg-[#00ff9d]/5' : themeKey === 'adult' ? 'card-adult-inset' : 'bg-blue-50'}`}>
+                                        <div className={`font-bold text-xl w-28 shrink-0 ${textAccent} ${themeKey === 'teen' ? 'font-tech' : themeKey === 'adult' ? 'font-serif-retro' : ''}`}>{item.time}</div>
+                                        <div className={`opacity-80 ${themeKey === 'teen' ? 'font-tech text-sm' : themeKey === 'adult' ? 'font-serif-retro' : 'font-sans'}`}>{item.benefit}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* --- FULL WIDTH: WHY TRUST US --- */}
+                        {currentData.proofPoints && (
+                            <div className={`${cardClass} p-8 mb-12`}>
+                                <div className={`p-2 mb-6 font-bold text-center text-xl
+                                    ${themeKey === 'teen' ? 'bg-[#00ff9d]/20 text-[#00ff9d] border-b border-[#00ff9d] font-tech uppercase' : 
+                                      themeKey === 'adult' ? 'bg-[#008080] text-white font-serif-retro' : 
+                                      'text-[#0284c7] border-b border-blue-100 font-sans'}`}>
+                                    {themeKey === 'teen' ? 'Why_Level_Up?' : themeKey === 'adult' ? 'Why_Trust_Us?' : 'Why Choose Us?'}
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {currentData.proofPoints.map((point, i) => (
+                                        <div key={i} className={`text-center p-6 rounded transition-transform hover:scale-105
+                                            ${themeKey === 'teen' ? 'bg-[#00ff9d]/10 border border-[#00ff9d]/30' : 
+                                              themeKey === 'adult' ? 'card-adult-inset' : 
+                                              'bg-blue-50 border border-blue-100'}`}>
+                                            <div className={`text-lg font-bold ${themeKey === 'teen' ? 'font-tech' : themeKey === 'adult' ? 'font-serif-retro' : 'font-sans'}`}>
+                                                {point}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </main>
 
                     {/* --- CONVERSION / SERVICES SECTION --- */}
