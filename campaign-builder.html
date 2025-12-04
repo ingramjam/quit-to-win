@@ -227,6 +227,7 @@
         const IconTrophy = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>;
         const IconUsers = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-2a6 6 0 0112 0v2zm6-14a4 4 0 100 8 4 4 0 000-8zm-3 13h6"></path></svg>;
         const IconHome = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 11l4-4m0 0l4 4m-4-4v4"></path></svg>;
+        const IconLightbulb = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.64l-.707.707M9 12a3 3 0 11 6 0 3 3 0 01-6 0z"></path></svg>;
 
         // --- DEEP CONTENT DATA ---
         const PRODUCT_DATA = {
@@ -391,6 +392,44 @@
             const yearlySavings = spend * 365;
             const progress = Math.min((yearlySavings / productContent.goalPrice) * 100, 100);
 
+            // Tips state
+            const [currentTipIndex, setCurrentTipIndex] = React.useState(0);
+            
+            // More detailed tips for each product
+            const tipsData = {
+                vape: [
+                    { icon: "🧠", title: "Brain Chemistry", tip: "Nicotine floods your dopamine system, making quitting feel impossible. But your brain rewires in 3-7 days." },
+                    { icon: "💨", title: "Lung Damage", tip: "Vape aerosol contains propylene glycol, vegetable glycerin, and formaldehyde. Your lungs start healing immediately." },
+                    { icon: "💰", title: "Hidden Costs", tip: "$8/day × 365 = $2,920/year. That's a car, a vacation, or a semester of college." },
+                    { icon: "😰", title: "Anxiety Cycle", tip: "Vaping creates withdrawal anxiety, making you think vaping calms you. It's the addiction talking." },
+                    { icon: "⚡", title: "Rapid Improvement", tip: "Within 2 weeks: better sleep, sharper focus, and anxiety drops significantly." }
+                ],
+                cigs: [
+                    { icon: "☠️", title: "7,000+ Chemicals", tip: "Cigarettes contain ammonia, arsenic, formaldehyde, and cyanide. That's why smoking is so toxic." },
+                    { icon: "❤️", title: "Heart Disease Risk", tip: "Smoking damages arteries and restricts blood flow. One year of quitting cuts heart disease risk by 50%." },
+                    { icon: "🫁", title: "Lung Function", tip: "After 3 weeks, your lung capacity improves 10-30%. After 1 year, your lungs largely heal." },
+                    { icon: "🦷", title: "Dental Health", tip: "Smoking stains teeth, causes gum disease, and leads to tooth loss. Quitting stops the damage." },
+                    { icon: "⏰", title: "Every Minute Counts", tip: "20 minutes after your last cigarette, your heart rate and blood pressure drop to normal." }
+                ],
+                weed: [
+                    { icon: "🧬", title: "Brain Development", tip: "If you use daily before 25, weed changes brain architecture permanently. Heavy teenage use = 8-point IQ drop." },
+                    { icon: "📚", title: "Memory & Focus", tip: "THC impairs the hippocampus (memory) and prefrontal cortex (focus). You get it all back in 4 weeks." },
+                    { icon: "🎯", title: "Motivation Loss", tip: "Chronic use reduces dopamine in the motivation center. Nothing feels good without weed—until you quit." },
+                    { icon: "💤", title: "Sleep Quality", tip: "Weed disrupts REM sleep. Quitting = vivid dreams return and deep sleep restores within 1 week." },
+                    { icon: "🚀", title: "Productivity Jump", tip: "Users report completing projects, passing exams, and achieving goals they couldn't while using." }
+                ],
+                pouch: [
+                    { icon: "🚨", title: "Oral Cancer Risk", tip: "Smokeless tobacco is 4x more likely to cause mouth cancer. The nicotine salt causes constant irritation." },
+                    { icon: "🦷", title: "Gum Recession", tip: "Permanent jaw bone loss happens. But gum tissue starts healing within 2 weeks of quitting." },
+                    { icon: "⚡", title: "Fast Absorption", tip: "One pouch = 3-4 cigarettes of nicotine. It hits fast, creating rapid addiction and tough withdrawal." },
+                    { icon: "😁", title: "Smile Recovery", tip: "Tooth mobility, decay, and gaps are reversible if caught early. Quit now to save your smile." },
+                    { icon: "💪", title: "Fastest Recovery", tip: "Smokeless users often report the fastest physical recovery of any tobacco product. You've got this." }
+                ]
+            };
+
+            const tips = tipsData[productKey] || tipsData.vape;
+            const currentTip = tips[currentTipIndex];
+
             return (
                 <div className="page-transition">
                     {/* Strategy Navigation */}
@@ -477,6 +516,81 @@
                                             <div className="h-full bg-accent transition-all duration-1000 ease-out" style={{width: `${progress}%`}}></div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Interactive Tips Section */}
+                        <section className="mb-20 slide-up">
+                            <div className="mb-12">
+                                <h2 className="text-4xl font-bold mb-2 flex items-center gap-3">
+                                    <span className="p-3 bg-accent/20 text-accent rounded-xl"><IconLightbulb /></span>
+                                    Expert Tips & Facts
+                                </h2>
+                                <p className="text-lg opacity-70">Click through to learn key facts about {productContent.label}</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                {/* Main Tips Card */}
+                                <div className="lg:col-span-2">
+                                    <div className="card-dynamic p-12 rounded-3xl border-2 border-accent h-full flex flex-col">
+                                        <div className="flex items-start justify-between mb-6">
+                                            <div className="text-6xl">{currentTip.icon}</div>
+                                            <div className="text-xs font-bold text-accent opacity-60 bg-accent/10 px-3 py-1 rounded-full">
+                                                {currentTipIndex + 1} of {tips.length}
+                                            </div>
+                                        </div>
+                                        <h3 className="text-3xl font-bold mb-4 text-accent">{currentTip.title}</h3>
+                                        <p className="text-lg leading-relaxed opacity-90 mb-8 flex-grow">{currentTip.tip}</p>
+                                        
+                                        {/* Navigation Dots */}
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex gap-2">
+                                                {tips.map((_, i) => (
+                                                    <button 
+                                                        key={i}
+                                                        onClick={() => setCurrentTipIndex(i)}
+                                                        className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentTipIndex ? 'bg-accent w-8' : 'bg-accent/30 hover:bg-accent/50'}`}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <div className="flex gap-3">
+                                                <button 
+                                                    onClick={() => setCurrentTipIndex(Math.max(0, currentTipIndex - 1))}
+                                                    disabled={currentTipIndex === 0}
+                                                    className="p-2 text-accent rounded-lg hover:bg-accent/10 disabled:opacity-30 transition-all"
+                                                >
+                                                    ← Prev
+                                                </button>
+                                                <button 
+                                                    onClick={() => setCurrentTipIndex(Math.min(tips.length - 1, currentTipIndex + 1))}
+                                                    disabled={currentTipIndex === tips.length - 1}
+                                                    className="p-2 text-accent rounded-lg hover:bg-accent/10 disabled:opacity-30 transition-all"
+                                                >
+                                                    Next →
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Quick Tips List */}
+                                <div className="space-y-3">
+                                    <p className="text-xs font-bold text-accent uppercase tracking-widest opacity-60 px-2">All Tips</p>
+                                    {tips.map((tip, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setCurrentTipIndex(i)}
+                                            className={`w-full text-left p-4 rounded-xl transition-all border-2 ${
+                                                i === currentTipIndex 
+                                                    ? 'bg-accent/20 border-accent' 
+                                                    : 'bg-white/30 border-transparent hover:bg-white/50'
+                                            }`}
+                                        >
+                                            <div className="text-2xl mb-2">{tip.icon}</div>
+                                            <div className="text-sm font-bold">{tip.title}</div>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                         </section>
