@@ -331,6 +331,25 @@
             "45+":   { label: "45+",   strategies: ["Freedom", "Resolution", "Health"] }
         };
 
+        // Language tones for different age groups
+        const TONE_VARIANTS = {
+            "18-29": {
+                calculatorDesc: "See how much {product} is actually draining from your wallet.",
+                whyMattersPre: "Real talk: ",
+                savingsLanguage: "That's money for a {goal} in just {days} days. Honestly."
+            },
+            "30-45": {
+                calculatorDesc: "Calculate your annual expenditure on {product} and see the financial impact.",
+                whyMattersPre: "The data shows: ",
+                savingsLanguage: "This equates to {goal} achievable in {days} days based on current consumption patterns."
+            },
+            "45+": {
+                calculatorDesc: "Assess your current weekly expenditure on {product} and evaluate the health and financial benefits of cessation.",
+                whyMattersPre: "Clinical evidence demonstrates: ",
+                savingsLanguage: "This represents sufficient savings for {goal} in approximately {days} days—an important health investment consideration."
+            }
+        };
+
         const MILESTONES = [
             { days: 3, title: "3 Days Nicotine-Free", reward: "Mental Clarity Boost" },
             { days: 7, title: "One Week Champion", reward: "Save $8-15" },
@@ -377,21 +396,31 @@
         );
 
         const CalculatorPage = ({ onNavigate, ageGroup, setAgeGroup, strategy, setStrategy, productKey, setProductKey, spend, setSpend }) => {
+            const [copied, setCopied] = React.useState(false);
             const currentCampaign = CAMPAIGNS[ageGroup];
             const safeStrategy = currentCampaign.strategies.includes(strategy) ? strategy : currentCampaign.strategies[0];
             const productContent = PRODUCT_DATA[productKey];
+            const tonVariant = TONE_VARIANTS[ageGroup];
             
             const contentKey = safeStrategy.toLowerCase();
             const textContent = productContent.facts[contentKey] || productContent.facts["freedom"];
 
             const handleProductChange = (key) => {
                 setProductKey(key);
-                setSpend(PRODUCT_DATA[key].avgCost);
+                setSpend(PRODUCT_DATA[key].avgCost * 7); // Convert daily to weekly
             };
 
-            const yearlySavings = spend * 365;
-            const weeklySavings = spend * 7;
+            const yearlySavings = spend * 52; // Weekly input
+            const weeklySavings = spend;
             const progress = Math.min((yearlySavings / productContent.goalPrice) * 100, 100);
+            
+            const handleCopyCard = () => {
+                const text = `I'm quitting ${productContent.label}!\n\nMy Savings:\n📊 Weekly: $${Math.round(weeklySavings)}\n💰 Yearly: $${Math.round(yearlySavings).toLocaleString()}\n\nGoal: ${productContent.goalItem} in ${Math.ceil(productContent.goalPrice / spend)} days\n\nJoin me at Kick It California! 💪`;
+                navigator.clipboard.writeText(text).then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                });
+            };
             
             // More detailed tips for each product
             const tipsData = {
@@ -479,14 +508,14 @@
                             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                                 <div>
                                     <h2 className="text-3xl font-bold mb-2">Cost Calculator</h2>
-                                    <p className="opacity-70 mb-8">See how much {productContent.label} is costing you per year.</p>
+                                    <p className="opacity-70 mb-8">{tonVariant.calculatorDesc.replace('{product}', productContent.label)}</p>
                                     
                                     <div className="bg-white/50 p-6 rounded-2xl border border-accent mb-8 backdrop-blur-sm">
                                         <div className="flex justify-between items-end mb-4">
-                                            <label className="text-xs font-bold opacity-60 uppercase tracking-widest">Daily Spend</label>
+                                            <label className="text-xs font-bold opacity-60 uppercase tracking-widest">Weekly Spend</label>
                                             <span className="text-5xl font-bold text-accent">${spend}</span>
                                         </div>
-                                        <input type="range" min="1" max="50" value={spend} onChange={(e) => setSpend(Number(e.target.value))} className="w-full" />
+                                        <input type="range" min="5" max="350" value={spend} onChange={(e) => setSpend(Number(e.target.value))} className="w-full" />
                                     </div>
                                 </div>
 
@@ -507,7 +536,7 @@
                                             </div>
                                         </div>
                                         <p className="text-sm opacity-80 leading-relaxed mb-6">
-                                            That's enough for a <strong className="text-accent">{productContent.goalItem}</strong> in just <strong>{Math.ceil(productContent.goalPrice / spend)} days</strong>.
+                                            {tonVariant.savingsLanguage.replace('{goal}', productContent.goalItem).replace('{days}', Math.ceil(productContent.goalPrice / spend))}
                                         </p>
                                     </div>
                                     
@@ -518,6 +547,9 @@
                                         <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
                                             <div className="h-full bg-accent transition-all duration-1000 ease-out" style={{width: `${progress}%`}}></div>
                                         </div>
+                                        <button onClick={handleCopyCard} className="w-full mt-4 px-4 py-2 bg-accent text-white text-sm font-bold rounded-lg hover:bg-opacity-90 transition-all">
+                                            {copied ? '✓ Copied!' : '📋 Share Your Savings'}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -549,7 +581,7 @@
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
                                 <div className="md:col-span-5">
                                     <h3 className="text-3xl font-bold mb-6">Why It Matters</h3>
-                                    <p className="opacity-80 mb-10 leading-relaxed">{productContent.whyItMatters}</p>
+                                    <p className="opacity-80 mb-10 leading-relaxed"><span className="font-semibold">{tonVariant.whyMattersPre}</span>{productContent.whyItMatters}</p>
                                     <div className="bg-accent bg-opacity-10 p-6 rounded-2xl border border-accent mb-8">
                                         <div className="flex items-center gap-3 mb-3 text-white font-bold">
                                             <IconInfo /> Did You Know?
@@ -663,7 +695,7 @@
             const [ageGroup, setAgeGroup] = React.useState("18-29");
             const [strategy, setStrategy] = React.useState("Freedom");
             const [productKey, setProductKey] = React.useState("vape");
-            const [spend, setSpend] = React.useState(PRODUCT_DATA["vape"].avgCost);
+            const [spend, setSpend] = React.useState(PRODUCT_DATA["vape"].avgCost * 7); // Weekly spend
 
             const themeClass = `theme-${strategy.toLowerCase()}`;
 
