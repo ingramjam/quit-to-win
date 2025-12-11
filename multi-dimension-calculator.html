@@ -238,6 +238,17 @@
             const [spend, setSpend] = React.useState(15); // Daily spend
             const [spendFreq, setSpendFreq] = React.useState("daily"); // daily, weekly
             const [yearsQuit, setYearsQuit] = React.useState(1); // Years quit for Mind & Environment
+            const [formData, setFormData] = React.useState({ firstName: '', lastName: '', email: '' });
+            const [formSubmitted, setFormSubmitted] = React.useState(false);
+
+            // Handle form submission
+            const handleFormSubmit = (e) => {
+                e.preventDefault();
+                // Here you would typically send the data to your backend/API
+                console.log('Form submitted:', formData);
+                setFormSubmitted(true);
+                setTimeout(() => setFormSubmitted(false), 3000);
+            };
 
             // Derived Data
             const currentData = DATA[ageGroup];
@@ -748,10 +759,11 @@
                     {/* Navigation / Header */}
                     <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
                         <div className="flex items-center gap-2">
-                            <div className={`p-2 rounded-lg ${currentData.theme === 'teen' ? 'bg-green-500 text-black' : currentData.theme === 'adult' ? 'bg-blue-600 text-white' : 'bg-amber-400 text-black'}`}>
-                                <IconDollar className="w-6 h-6" />
-                            </div>
-                            <span className="text-2xl font-bold brand-font tracking-tight">Quit<span className={textAccent}>&</span>Win</span>
+                            <img 
+                                src="https://kicform.org/hs-fs/hubfs/kic%20logo2.png?width=118&height=40&name=kic%20logo2.png" 
+                                alt="Kick It California Logo" 
+                                className="h-10 object-contain"
+                            />
                         </div>
                         
                         {/* Age Selector */}
@@ -834,16 +846,45 @@
                                 Ready to make this real?
                             </h2>
                             <p className="text-lg opacity-80 mb-8 max-w-xl mx-auto">
-                                You've done the math. Now take the first step. Kick It California provides free, personalized support to help you quit for good.
+                                You've done the math. Now take the first step. Get free, personalized support to help you quit for good.
                             </p>
-                            <a 
-                                href="https://kicform.org/kick-it-2" 
-                                target="_blank"
-                                className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-bold transition-transform hover:scale-105 ${btnClass}`}
-                            >
-                                Kick It Now
-                                <IconArrowRight className="w-5 h-5" />
-                            </a>
+                            
+                            {/* Contact Form */}
+                            <form onSubmit={handleFormSubmit} className="max-w-md mx-auto space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <input
+                                        type="text"
+                                        placeholder="First Name"
+                                        required
+                                        value={formData.firstName}
+                                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                                        className={`px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${currentData.theme === 'adult' ? 'border-blue-200 focus:ring-blue-500 bg-white' : 'border-white/20 bg-white/10 text-white placeholder-white/50 focus:ring-white/50'}`}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Last Name"
+                                        required
+                                        value={formData.lastName}
+                                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                                        className={`px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${currentData.theme === 'adult' ? 'border-blue-200 focus:ring-blue-500 bg-white' : 'border-white/20 bg-white/10 text-white placeholder-white/50 focus:ring-white/50'}`}
+                                    />
+                                </div>
+                                <input
+                                    type="email"
+                                    placeholder="Email Address"
+                                    required
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                    className={`w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${currentData.theme === 'adult' ? 'border-blue-200 focus:ring-blue-500 bg-white' : 'border-white/20 bg-white/10 text-white placeholder-white/50 focus:ring-white/50'}`}
+                                />
+                                <button 
+                                    type="submit"
+                                    className={`w-full inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-lg font-bold transition-transform hover:scale-105 ${btnClass}`}
+                                >
+                                    {formSubmitted ? '✓ Submitted!' : 'Get Free Support'}
+                                    {!formSubmitted && <IconArrowRight className="w-5 h-5" />}
+                                </button>
+                            </form>
                         </div>
                     </section>
 
