@@ -12,6 +12,9 @@
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
+    <!-- html2canvas for image generation -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -252,18 +255,63 @@
             // Environmental stats per year
             const envStats = currentData.environment.stats[product];
 
-            // Copy Handler
-            const handleCopy = () => {
-                let text = '';
-                if (dimension === 'money') {
-                    text = `I just calculated that quitting ${PRODUCT_LABELS[product]} saves me $${yearlySavings.toLocaleString()} a year! That's enough for ${currentProductData.item} ${currentProductData.emoji}. Check your stats here:`;
-                } else if (dimension === 'mind') {
-                    text = `Quitting ${PRODUCT_LABELS[product]} will transform my health and mind. ${currentData.health.facts[0]} Learn more about the real cost:`;
-                } else {
-                    text = `By quitting ${PRODUCT_LABELS[product]}, I'll save ${envStats.trees} trees and ${envStats.water} of water per year! 🌍 Calculate your environmental impact:`;
+            // Share/Copy Handler - Converts card to image
+            const handleShare = async () => {
+                const postcardElement = document.getElementById('postcard');
+                if (!postcardElement) return;
+                
+                try {
+                    // Hide the hover overlay temporarily
+                    const overlay = postcardElement.querySelector('.share-overlay');
+                    if (overlay) overlay.style.display = 'none';
+                    
+                    // Generate canvas from the postcard
+                    const canvas = await html2canvas(postcardElement, {
+                        backgroundColor: null,
+                        scale: 2, // Higher quality
+                        logging: false,
+                        useCORS: true
+                    });
+                    
+                    // Show overlay again
+                    if (overlay) overlay.style.display = 'flex';
+                    
+                    // Convert to blob
+                    canvas.toBlob(async (blob) => {
+                        try {
+                            // Try to use native share if available
+                            if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'quit-win.png', { type: 'image/png' })] })) {
+                                await navigator.share({
+                                    files: [new File([blob], 'quit-win.png', { type: 'image/png' })],
+                                    title: 'My Quit & Win Reality Check',
+                                    text: 'Check out what I can achieve by quitting! 🎯'
+                                });
+                            } else {
+                                // Fallback: copy to clipboard
+                                await navigator.clipboard.write([
+                                    new ClipboardItem({
+                                        'image/png': blob
+                                    })
+                                ]);
+                                alert('Postcard image copied to clipboard! 📋 Paste it anywhere to share.');
+                            }
+                        } catch (err) {
+                            // Final fallback: download
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'quit-win-postcard.png';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            alert('Postcard downloaded! 📥 Share it on social media.');
+                        }
+                    }, 'image/png');
+                } catch (error) {
+                    console.error('Error generating image:', error);
+                    alert('Sorry, there was an error generating the image. Please try again.');
                 }
-                navigator.clipboard.writeText(text);
-                alert("Postcard text copied to clipboard! Share it with a friend.");
             };
 
             // Render dimension-specific content
@@ -515,7 +563,7 @@
             const renderPostcard = () => {
                 if (dimension === 'money') {
                     return (
-                        <div className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
+                        <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
                             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-10 rounded-bl-full ${textAccent}`}></div>
                             
                             <div>
@@ -558,20 +606,20 @@
                                 </div>
                             </div>
                             
-                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div className="share-overlay absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <button 
-                                    onClick={handleCopy}
+                                    onClick={handleShare}
                                     className="bg-white text-black px-6 py-3 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform flex items-center gap-2 hover:bg-gray-100"
                                 >
                                     <IconShare className="w-4 h-4" />
-                                    Copy & Share
+                                    Share as Image
                                 </button>
                             </div>
                         </div>
                     );
                 } else if (dimension === 'mind') {
                     return (
-                        <div className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
+                        <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
                             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-10 rounded-bl-full ${textAccent}`}></div>
                             
                             <div>
@@ -609,20 +657,20 @@
                                 </p>
                             </div>
                             
-                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div className="share-overlay absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <button 
-                                    onClick={handleCopy}
+                                    onClick={handleShare}
                                     className="bg-white text-black px-6 py-3 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform flex items-center gap-2 hover:bg-gray-100"
                                 >
                                     <IconShare className="w-4 h-4" />
-                                    Copy & Share
+                                    Share as Image
                                 </button>
                             </div>
                         </div>
                     );
                 } else { // environment
                     return (
-                        <div className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
+                        <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
                             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-10 rounded-bl-full ${textAccent}`}></div>
                             
                             <div>
@@ -645,15 +693,15 @@
                                     <div className={`p-4 rounded-lg ${currentData.theme === 'adult' ? 'bg-green-50' : 'bg-white/5'}`}>
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">🌲</span>
-                                            <span className={`text-2xl font-bold ${textAccent}`}>{envStats.trees} trees</span>
+                                            <span className={`text-2xl font-bold ${textAccent}`}>{(parseInt(envStats.trees) * yearsQuit)} trees</span>
                                         </div>
-                                        <p className="text-xs opacity-70 mt-1">saved per year</p>
+                                        <p className="text-xs opacity-70 mt-1">saved over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
 
                                     <div className={`p-4 rounded-lg ${currentData.theme === 'adult' ? 'bg-blue-50' : 'bg-white/5'}`}>
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">💧</span>
-                                            <span className={`text-2xl font-bold ${textAccent}`}>{envStats.water}</span>
+                                            <span className={`text-2xl font-bold ${textAccent}`}>{(parseInt(envStats.water) * yearsQuit).toLocaleString()} L</span>
                                         </div>
                                         <p className="text-xs opacity-70 mt-1">water conserved</p>
                                     </div>
@@ -661,7 +709,7 @@
                                     <div className={`p-4 rounded-lg ${currentData.theme === 'adult' ? 'bg-purple-50' : 'bg-white/5'}`}>
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">🗑️</span>
-                                            <span className={`text-2xl font-bold ${textAccent}`}>{envStats.waste}</span>
+                                            <span className={`text-2xl font-bold ${textAccent}`}>{(parseFloat(envStats.waste) * yearsQuit).toFixed(1)} kg</span>
                                         </div>
                                         <p className="text-xs opacity-70 mt-1">waste prevented</p>
                                     </div>
@@ -674,13 +722,13 @@
                                 </p>
                             </div>
                             
-                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div className="share-overlay absolute inset-0 bg-black/60 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <button 
-                                    onClick={handleCopy}
+                                    onClick={handleShare}
                                     className="bg-white text-black px-6 py-3 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform flex items-center gap-2 hover:bg-gray-100"
                                 >
                                     <IconShare className="w-4 h-4" />
-                                    Copy & Share
+                                    Share as Image
                                 </button>
                             </div>
                         </div>
@@ -761,7 +809,7 @@
                             {renderPostcard()}
                             
                             <p className="mt-6 text-sm opacity-50 text-center">
-                                Hover card to share your win. <br/>Based on avg data in US (2025).
+                                Hover card to share as image. <br/>Based on avg data in US (2025).
                             </p>
                         </div>
                     </main>
