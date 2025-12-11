@@ -678,7 +678,7 @@
                         </p>
 
                         {/* Dimension Tabs - NEW */}
-                        <div className="flex justify-center gap-3 mb-8">
+                        <div className="flex justify-center gap-3 mb-16">
                             {DIMENSION_TABS.map((tab) => {
                                 const Icon = tab.icon;
                                 return (
@@ -692,19 +692,6 @@
                                     </button>
                                 );
                             })}
-                        </div>
-
-                        {/* Product Toggles */}
-                        <div className="flex flex-wrap justify-center gap-3 mb-16">
-                            {Object.entries(PRODUCT_LABELS).map(([key, label]) => (
-                                <button
-                                    key={key}
-                                    onClick={() => setProduct(key)}
-                                    className={`px-6 py-3 rounded-xl border-2 font-medium transition-all ${product === key ? `${btnClass} border-transparent shadow-lg` : `border-gray-700 bg-transparent hover:border-gray-500 opacity-60`}`}
-                                >
-                                    {label}
-                                </button>
-                            ))}
                         </div>
                     </header>
 
