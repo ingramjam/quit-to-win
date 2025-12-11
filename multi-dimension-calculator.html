@@ -146,10 +146,10 @@
                 environment: {
                     headline: "Your generation will inherit this planet",
                     stats: {
-                        vape: { waste: "2.5 kg", trees: "12", water: "850 L" },
-                        cigs: { waste: "8 kg", trees: "40", water: "2800 L" },
-                        weed: { waste: "5 kg", trees: "25", water: "1500 L" },
-                        pouch: { waste: "3 kg", trees: "15", water: "950 L" }
+                        vape: { waste: "5.5 lbs", trees: "12", water: "225 gal" },
+                        cigs: { waste: "17.6 lbs", trees: "40", water: "740 gal" },
+                        weed: { waste: "11 lbs", trees: "25", water: "396 gal" },
+                        pouch: { waste: "6.6 lbs", trees: "15", water: "251 gal" }
                     }
                 }
             },
@@ -175,10 +175,10 @@
                 environment: {
                     headline: "Building your life, not destroying nature",
                     stats: {
-                        vape: { waste: "3 kg", trees: "15", water: "1000 L" },
-                        cigs: { waste: "10 kg", trees: "50", water: "3500 L" },
-                        weed: { waste: "6 kg", trees: "30", water: "1800 L" },
-                        pouch: { waste: "4 kg", trees: "18", water: "1200 L" }
+                        vape: { waste: "6.6 lbs", trees: "15", water: "264 gal" },
+                        cigs: { waste: "22 lbs", trees: "50", water: "925 gal" },
+                        weed: { waste: "13.2 lbs", trees: "30", water: "475 gal" },
+                        pouch: { waste: "8.8 lbs", trees: "18", water: "317 gal" }
                     }
                 }
             },
@@ -204,10 +204,10 @@
                 environment: {
                     headline: "Leave a green legacy for your grandchildren",
                     stats: {
-                        vape: { waste: "4 kg", trees: "20", water: "1300 L" },
-                        cigs: { waste: "12 kg", trees: "60", water: "4200 L" },
-                        weed: { waste: "7 kg", trees: "35", water: "2100 L" },
-                        pouch: { waste: "5 kg", trees: "22", water: "1400 L" }
+                        vape: { waste: "8.8 lbs", trees: "20", water: "343 gal" },
+                        cigs: { waste: "26.5 lbs", trees: "60", water: "1110 gal" },
+                        weed: { waste: "15.4 lbs", trees: "35", water: "555 gal" },
+                        pouch: { waste: "11 lbs", trees: "22", water: "370 gal" }
                     }
                 }
             }
@@ -484,7 +484,7 @@
                     // Calculate environmental impact based on years quit
                     const totalWaste = (parseFloat(envStats.waste) * yearsQuit).toFixed(1);
                     const totalTrees = parseInt(envStats.trees) * yearsQuit;
-                    const totalWater = parseInt(envStats.water) * yearsQuit;
+                    const totalWater = (parseFloat(envStats.water) * yearsQuit).toFixed(0);
                     
                     return (
                         <div className={`p-8 rounded-3xl ${currentData.theme === 'adult' ? 'bg-white shadow-xl' : 'bg-white/5 border border-white/10'}`}>
@@ -524,7 +524,7 @@
                                     <div className={`p-6 rounded-2xl border-2 ${currentData.theme === 'teen' ? 'border-green-500/30 bg-green-500/5' : currentData.theme === 'adult' ? 'border-blue-200 bg-blue-50' : 'border-amber-500/30 bg-amber-500/5'}`}>
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">🗑️</span>
-                                            <span className={`text-3xl font-bold ${textAccent}`}>{totalWaste} kg</span>
+                                            <span className={`text-3xl font-bold ${textAccent}`}>{totalWaste} lbs</span>
                                         </div>
                                         <p className="text-sm font-medium">Waste Prevented</p>
                                         <p className="text-xs opacity-60 mt-1">Plastic, batteries, and toxic materials over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
@@ -542,7 +542,7 @@
                                     <div className={`p-6 rounded-2xl border-2 ${currentData.theme === 'teen' ? 'border-green-500/30 bg-green-500/5' : currentData.theme === 'adult' ? 'border-blue-200 bg-blue-50' : 'border-amber-500/30 bg-amber-500/5'}`}>
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">💧</span>
-                                            <span className={`text-3xl font-bold ${textAccent}`}>{totalWater.toLocaleString()} L</span>
+                                            <span className={`text-3xl font-bold ${textAccent}`}>{totalWater} gal</span>
                                         </div>
                                         <p className="text-sm font-medium">Water Conserved</p>
                                         <p className="text-xs opacity-60 mt-1">Manufacturing and agricultural water usage over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
@@ -551,7 +551,7 @@
 
                                 <div className={`p-4 rounded-xl text-center ${currentData.theme === 'teen' ? 'bg-green-500/10' : currentData.theme === 'adult' ? 'bg-green-100' : 'bg-amber-500/10'}`}>
                                     <p className="text-sm opacity-80">
-                                        <span className={`font-bold ${textAccent}`}>Your impact matters!</span> {totalTrees} trees and {totalWater.toLocaleString()} L of water saved! 🌍
+                                        <span className={`font-bold ${textAccent}`}>Your impact matters!</span> {totalTrees} trees and {totalWater} gallons of water saved! 🌍
                                     </p>
                                 </div>
                             </div>
@@ -701,7 +701,7 @@
                                     <div className={`p-4 rounded-lg ${currentData.theme === 'adult' ? 'bg-blue-50' : 'bg-white/5'}`}>
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">💧</span>
-                                            <span className={`text-2xl font-bold ${textAccent}`}>{(parseInt(envStats.water) * yearsQuit).toLocaleString()} L</span>
+                                            <span className={`text-2xl font-bold ${textAccent}`}>{(parseFloat(envStats.water) * yearsQuit).toFixed(0)} gal</span>
                                         </div>
                                         <p className="text-xs opacity-70 mt-1">water conserved</p>
                                     </div>
@@ -709,7 +709,7 @@
                                     <div className={`p-4 rounded-lg ${currentData.theme === 'adult' ? 'bg-purple-50' : 'bg-white/5'}`}>
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">🗑️</span>
-                                            <span className={`text-2xl font-bold ${textAccent}`}>{(parseFloat(envStats.waste) * yearsQuit).toFixed(1)} kg</span>
+                                            <span className={`text-2xl font-bold ${textAccent}`}>{(parseFloat(envStats.waste) * yearsQuit).toFixed(1)} lbs</span>
                                         </div>
                                         <p className="text-xs opacity-70 mt-1">waste prevented</p>
                                     </div>
