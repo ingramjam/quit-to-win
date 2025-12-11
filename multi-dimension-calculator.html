@@ -229,6 +229,7 @@
             const [dimension, setDimension] = React.useState("money"); // money, mind, environment
             const [spend, setSpend] = React.useState(15); // Daily spend
             const [spendFreq, setSpendFreq] = React.useState("daily"); // daily, weekly
+            const [yearsQuit, setYearsQuit] = React.useState(1); // Years quit for Mind & Environment
 
             // Derived Data
             const currentData = DATA[ageGroup];
@@ -333,6 +334,12 @@
                         </div>
                     );
                 } else if (dimension === 'mind') {
+                    // Calculate health improvements based on years quit
+                    const lungImprovement = Math.min(30 + (yearsQuit * 15), 95);
+                    const heartRisk = Math.max(50 - (yearsQuit * 10), 5);
+                    const brainClarity = Math.min(85 + (yearsQuit * 5), 100);
+                    const energyBoost = Math.min(40 + (yearsQuit * 12), 95);
+                    
                     return (
                         <div className={`p-8 rounded-3xl ${currentData.theme === 'adult' ? 'bg-white shadow-xl' : 'bg-white/5 border border-white/10'}`}>
                             <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
@@ -341,6 +348,25 @@
                             </h2>
                             
                             <div className="space-y-8">
+                                {/* Years Quit Slider */}
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 opacity-70">
+                                        Years Quit
+                                    </label>
+                                    <div className="flex items-center gap-4">
+                                        <span className={`text-3xl font-bold ${textAccent}`}>{yearsQuit}</span>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="10" 
+                                            value={yearsQuit} 
+                                            onChange={(e) => setYearsQuit(Number(e.target.value))}
+                                            className={`flex-1 h-2 rounded-lg appearance-none cursor-pointer ${textAccent}`}
+                                        />
+                                        <span className="text-sm opacity-60">{yearsQuit === 1 ? '1 year' : `${yearsQuit} years`}</span>
+                                    </div>
+                                </div>
+
                                 <div className={`p-6 rounded-2xl ${currentData.theme === 'adult' ? 'bg-blue-50' : 'bg-white/5'}`}>
                                     <h3 className="font-bold mb-4">{currentData.health.headline}</h3>
                                     <ul className="space-y-3">
@@ -359,40 +385,40 @@
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">🫁 Lungs</span>
-                                                <span className={`font-bold ${textAccent}`}>+30% capacity in 3 months</span>
+                                                <span className={`font-bold ${textAccent}`}>+{lungImprovement.toFixed(0)}% capacity</span>
                                             </div>
                                             <div className="organ-meter">
-                                                <div className="organ-meter-overlay" style={{width: '20%'}}></div>
+                                                <div className="organ-meter-overlay" style={{width: `${100 - lungImprovement}%`}}></div>
                                             </div>
                                         </div>
                                         
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">❤️ Heart</span>
-                                                <span className={`font-bold ${textAccent}`}>Risk -50% in 1 year</span>
+                                                <span className={`font-bold ${textAccent}`}>Risk -{heartRisk.toFixed(0)}%</span>
                                             </div>
                                             <div className="organ-meter">
-                                                <div className="organ-meter-overlay" style={{width: '25%'}}></div>
+                                                <div className="organ-meter-overlay" style={{width: `${heartRisk}%`}}></div>
                                             </div>
                                         </div>
                                         
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">🧠 Brain</span>
-                                                <span className={`font-bold ${textAccent}`}>Clarity returns in weeks</span>
+                                                <span className={`font-bold ${textAccent}`}>{brainClarity.toFixed(0)}% clarity</span>
                                             </div>
                                             <div className="organ-meter">
-                                                <div className="organ-meter-overlay" style={{width: '15%'}}></div>
+                                                <div className="organ-meter-overlay" style={{width: `${100 - brainClarity}%`}}></div>
                                             </div>
                                         </div>
 
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">💪 Energy</span>
-                                                <span className={`font-bold ${textAccent}`}>+40% in 2 months</span>
+                                                <span className={`font-bold ${textAccent}`}>+{energyBoost.toFixed(0)}%</span>
                                             </div>
                                             <div className="organ-meter">
-                                                <div className="organ-meter-overlay" style={{width: '30%'}}></div>
+                                                <div className="organ-meter-overlay" style={{width: `${100 - energyBoost}%`}}></div>
                                             </div>
                                         </div>
                                     </div>
@@ -400,13 +426,18 @@
 
                                 <div className={`p-4 rounded-xl text-center ${currentData.theme === 'teen' ? 'bg-green-500/10' : currentData.theme === 'adult' ? 'bg-blue-100' : 'bg-amber-500/10'}`}>
                                     <p className="text-sm opacity-80">
-                                        <span className={`font-bold ${textAccent}`}>Recovery starts immediately.</span> Your body wants to heal.
+                                        <span className={`font-bold ${textAccent}`}>After {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}:</span> Your body continues healing. Keep going!
                                     </p>
                                 </div>
                             </div>
                         </div>
                     );
                 } else { // environment
+                    // Calculate environmental impact based on years quit
+                    const totalWaste = (parseFloat(envStats.waste) * yearsQuit).toFixed(1);
+                    const totalTrees = parseInt(envStats.trees) * yearsQuit;
+                    const totalWater = parseInt(envStats.water) * yearsQuit;
+                    
                     return (
                         <div className={`p-8 rounded-3xl ${currentData.theme === 'adult' ? 'bg-white shadow-xl' : 'bg-white/5 border border-white/10'}`}>
                             <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
@@ -415,10 +446,29 @@
                             </h2>
                             
                             <div className="space-y-8">
+                                {/* Years Quit Slider */}
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 opacity-70">
+                                        Years Quit
+                                    </label>
+                                    <div className="flex items-center gap-4">
+                                        <span className={`text-3xl font-bold ${textAccent}`}>{yearsQuit}</span>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="10" 
+                                            value={yearsQuit} 
+                                            onChange={(e) => setYearsQuit(Number(e.target.value))}
+                                            className={`flex-1 h-2 rounded-lg appearance-none cursor-pointer ${textAccent}`}
+                                        />
+                                        <span className="text-sm opacity-60">{yearsQuit === 1 ? '1 year' : `${yearsQuit} years`}</span>
+                                    </div>
+                                </div>
+
                                 <div className={`p-6 rounded-2xl ${currentData.theme === 'adult' ? 'bg-green-50' : 'bg-white/5'}`}>
                                     <h3 className="font-bold mb-2">{currentData.environment.headline}</h3>
                                     <p className="text-sm opacity-80">
-                                        Your habit doesn't just hurt you—it harms the planet. Here's what you'll save each year by quitting:
+                                        Your habit doesn't just hurt you—it harms the planet. Here's what you'll save over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'} by quitting:
                                     </p>
                                 </div>
 
@@ -426,34 +476,34 @@
                                     <div className={`p-6 rounded-2xl border-2 ${currentData.theme === 'teen' ? 'border-green-500/30 bg-green-500/5' : currentData.theme === 'adult' ? 'border-blue-200 bg-blue-50' : 'border-amber-500/30 bg-amber-500/5'}`}>
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">🗑️</span>
-                                            <span className={`text-3xl font-bold ${textAccent}`}>{envStats.waste}</span>
+                                            <span className={`text-3xl font-bold ${textAccent}`}>{totalWaste} kg</span>
                                         </div>
                                         <p className="text-sm font-medium">Waste Prevented</p>
-                                        <p className="text-xs opacity-60 mt-1">Plastic, batteries, and toxic materials per year</p>
+                                        <p className="text-xs opacity-60 mt-1">Plastic, batteries, and toxic materials over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
 
                                     <div className={`p-6 rounded-2xl border-2 ${currentData.theme === 'teen' ? 'border-green-500/30 bg-green-500/5' : currentData.theme === 'adult' ? 'border-blue-200 bg-blue-50' : 'border-amber-500/30 bg-amber-500/5'}`}>
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">🌲</span>
-                                            <span className={`text-3xl font-bold ${textAccent}`}>{envStats.trees}</span>
+                                            <span className={`text-3xl font-bold ${textAccent}`}>{totalTrees}</span>
                                         </div>
                                         <p className="text-sm font-medium">Trees Saved</p>
-                                        <p className="text-xs opacity-60 mt-1">Annual equivalent in paper and manufacturing impact</p>
+                                        <p className="text-xs opacity-60 mt-1">Equivalent in paper and manufacturing impact over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
 
                                     <div className={`p-6 rounded-2xl border-2 ${currentData.theme === 'teen' ? 'border-green-500/30 bg-green-500/5' : currentData.theme === 'adult' ? 'border-blue-200 bg-blue-50' : 'border-amber-500/30 bg-amber-500/5'}`}>
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">💧</span>
-                                            <span className={`text-3xl font-bold ${textAccent}`}>{envStats.water}</span>
+                                            <span className={`text-3xl font-bold ${textAccent}`}>{totalWater.toLocaleString()} L</span>
                                         </div>
                                         <p className="text-sm font-medium">Water Conserved</p>
-                                        <p className="text-xs opacity-60 mt-1">Manufacturing and agricultural water usage per year</p>
+                                        <p className="text-xs opacity-60 mt-1">Manufacturing and agricultural water usage over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
                                 </div>
 
                                 <div className={`p-4 rounded-xl text-center ${currentData.theme === 'teen' ? 'bg-green-500/10' : currentData.theme === 'adult' ? 'bg-green-100' : 'bg-amber-500/10'}`}>
                                     <p className="text-sm opacity-80">
-                                        <span className={`font-bold ${textAccent}`}>Over 10 years:</span> {parseInt(envStats.trees) * 10} trees, {parseInt(envStats.waste) * 10} kg waste prevented! 🌍
+                                        <span className={`font-bold ${textAccent}`}>Your impact matters!</span> {totalTrees} trees and {totalWater.toLocaleString()} L of water saved! 🌍
                                     </p>
                                 </div>
                             </div>
