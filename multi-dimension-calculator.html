@@ -896,6 +896,21 @@
                         </div>
                     )}
                     
+                    {/* Video Background for 18-35 age group */}
+                    {ageGroup === "18-35" && (
+                        <div className="video-background-wrapper">
+                            <video 
+                                className="video-background"
+                                src="https://raw.githubusercontent.com/ingramjam/kic-media-campaign/main/break%20the%20cycle.mp4"
+                                muted
+                                autoPlay
+                                loop
+                                playsInline
+                                onError={(e) => console.error('Video failed to load:', e)}
+                            />
+                        </div>
+                    )}
+                    
                     <div className="content-wrapper">
                     {/* Navigation / Header */}
                     <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
