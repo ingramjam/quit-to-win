@@ -42,15 +42,15 @@
         /* Theme Gradients */
         .theme-teen { background: linear-gradient(135deg, #111827 0%, #000000 100%); color: #4ade80; }
         .theme-adult { background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); color: #1e3a8a; }
-        .theme-senior { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fbbf24; }
+        .theme-senior { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fbae23; }
 
         .card-teen { background: #1f2937; border: 2px solid #4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.2); }
         .card-adult { background: #ffffff; border: 1px solid #bfdbfe; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1); }
-        .card-senior { background: #1e293b; border: 1px solid #fbbf24; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.15); }
+        .card-senior { background: #1e293b; border: 1px solid #fbae23; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.15); }
         
         .accent-teen { color: #4ade80; }
         .accent-adult { color: #2563eb; }
-        .accent-senior { color: #fbbf24; }
+        .accent-senior { color: #fbae23; }
 
         .btn-teen { background-color: #4ade80; color: #000; }
         .btn-teen:hover { background-color: #22c55e; }
@@ -58,7 +58,7 @@
         .btn-adult { background-color: #2563eb; color: #fff; }
         .btn-adult:hover { background-color: #1d4ed8; }
         
-        .btn-senior { background-color: #fbbf24; color: #0f172a; }
+        .btn-senior { background-color: #fbae23; color: #0f172a; }
         .btn-senior:hover { background-color: #f59e0b; }
 
         /* Range Input Styling */
@@ -336,7 +336,7 @@
                     return (
                         <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
                             <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                                <IconTarget className="text-amber-400" />
+                                <IconTarget className="text-[#fbae23]" />
                                 Calculate Your Savings
                             </h2>
                             
@@ -353,7 +353,7 @@
                                             max="100" 
                                             value={spend} 
                                             onChange={(e) => setSpend(Number(e.target.value))}
-                                            className="flex-1 h-2 rounded-lg appearance-none cursor-pointer text-amber-400"
+                                            className="flex-1 h-2 rounded-lg appearance-none cursor-pointer text-[#fbae23]"
                                         />
                                     </div>
                                 </div>
@@ -365,13 +365,13 @@
                                     <div className="flex gap-4">
                                         <button 
                                             onClick={() => setSpendFreq('daily')}
-                                            className={`flex-1 py-3 rounded-lg border ${spendFreq === 'daily' ? 'text-amber-400 border-current bg-current/10' : 'border-gray-600 opacity-50'}`}
+                                            className={`flex-1 py-3 rounded-lg border ${spendFreq === 'daily' ? 'text-[#fbae23] border-current bg-current/10' : 'border-gray-600 opacity-50'}`}
                                         >
                                             Daily
                                         </button>
                                         <button 
                                             onClick={() => setSpendFreq('weekly')}
-                                            className={`flex-1 py-3 rounded-lg border ${spendFreq === 'weekly' ? 'text-amber-400 border-current bg-current/10' : 'border-gray-600 opacity-50'}`}
+                                            className={`flex-1 py-3 rounded-lg border ${spendFreq === 'weekly' ? 'text-[#fbae23] border-current bg-current/10' : 'border-gray-600 opacity-50'}`}
                                         >
                                             Weekly
                                         </button>
@@ -382,15 +382,15 @@
                                     <div className="grid grid-cols-3 gap-4 text-center">
                                         <div className="p-4 rounded-2xl bg-black/5">
                                             <div className="text-xs opacity-60 uppercase mb-1">1 Month</div>
-                                            <div className="text-xl font-bold text-amber-400">${Math.round(monthlySavings).toLocaleString()}</div>
+                                            <div className="text-xl font-bold text-[#fbae23]">${Math.round(monthlySavings).toLocaleString()}</div>
                                         </div>
-                                        <div className="p-4 rounded-2xl bg-amber-500/20">
+                                        <div className="p-4 rounded-2xl bg-[#e9a01f]/20">
                                             <div className="text-xs opacity-60 uppercase mb-1">1 Year</div>
-                                            <div className="text-2xl font-bold text-amber-400">${Math.round(yearlySavings).toLocaleString()}</div>
+                                            <div className="text-2xl font-bold text-[#fbae23]">${Math.round(yearlySavings).toLocaleString()}</div>
                                         </div>
                                         <div className="p-4 rounded-2xl bg-black/5">
                                             <div className="text-xs opacity-60 uppercase mb-1">10 Years</div>
-                                            <div className="text-xl font-bold text-amber-400">${Math.round(yearlySavings * 10).toLocaleString()}</div>
+                                            <div className="text-xl font-bold text-[#fbae23]">${Math.round(yearlySavings * 10).toLocaleString()}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -407,7 +407,7 @@
                     return (
                         <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
                             <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                                <IconBrain className="text-amber-400" />
+                                <IconBrain className="text-[#fbae23]" />
                                 Health Impact Visualization
                             </h2>
                             
@@ -418,14 +418,14 @@
                                         Years Quit
                                     </label>
                                     <div className="flex items-center gap-4">
-                                        <span className="text-3xl font-bold text-amber-400">{yearsQuit}</span>
+                                        <span className="text-3xl font-bold text-[#fbae23]">{yearsQuit}</span>
                                         <input 
                                             type="range" 
                                             min="1" 
                                             max="10" 
                                             value={yearsQuit} 
                                             onChange={(e) => setYearsQuit(Number(e.target.value))}
-                                            className="flex-1 h-2 rounded-lg appearance-none cursor-pointer text-amber-400"
+                                            className="flex-1 h-2 rounded-lg appearance-none cursor-pointer text-[#fbae23]"
                                         />
                                         <span className="text-sm opacity-60">{yearsQuit === 1 ? '1 year' : `${yearsQuit} years`}</span>
                                     </div>
@@ -437,7 +437,7 @@
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">🫁 Lungs</span>
-                                                <span className="font-bold text-amber-400">+{lungImprovement.toFixed(0)}% capacity</span>
+                                                <span className="font-bold text-[#fbae23]">+{lungImprovement.toFixed(0)}% capacity</span>
                                             </div>
                                             <div className="organ-meter">
                                                 <div className="organ-meter-overlay" style={{width: `${100 - lungImprovement}%`}}></div>
@@ -447,7 +447,7 @@
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">❤️ Heart</span>
-                                                <span className="font-bold text-amber-400">Risk -{heartRisk.toFixed(0)}%</span>
+                                                <span className="font-bold text-[#fbae23]">Risk -{heartRisk.toFixed(0)}%</span>
                                             </div>
                                             <div className="organ-meter">
                                                 <div className="organ-meter-overlay" style={{width: `${heartRisk}%`}}></div>
@@ -457,7 +457,7 @@
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">🧠 Brain</span>
-                                                <span className="font-bold text-amber-400">{brainClarity.toFixed(0)}% clarity</span>
+                                                <span className="font-bold text-[#fbae23]">{brainClarity.toFixed(0)}% clarity</span>
                                             </div>
                                             <div className="organ-meter">
                                                 <div className="organ-meter-overlay" style={{width: `${100 - brainClarity}%`}}></div>
@@ -467,7 +467,7 @@
                                         <div>
                                             <div className="flex justify-between mb-2 text-sm">
                                                 <span className="opacity-70">💪 Energy</span>
-                                                <span className="font-bold text-amber-400">+{energyBoost.toFixed(0)}%</span>
+                                                <span className="font-bold text-[#fbae23]">+{energyBoost.toFixed(0)}%</span>
                                             </div>
                                             <div className="organ-meter">
                                                 <div className="organ-meter-overlay" style={{width: `${100 - energyBoost}%`}}></div>
@@ -489,9 +489,9 @@
                                     <p className="text-xs opacity-50 text-center mt-2">← Swipe to see more →</p>
                                 </div>
 
-                                <div className="p-4 rounded-xl text-center bg-amber-500/10">
+                                <div className="p-4 rounded-xl text-center bg-[#e9a01f]/10">
                                     <p className="text-sm opacity-80">
-                                        <span className="font-bold text-amber-400">After {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}:</span> Your body continues healing. Keep going!
+                                        <span className="font-bold text-[#fbae23]">After {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}:</span> Your body continues healing. Keep going!
                                     </p>
                                 </div>
                             </div>
@@ -506,7 +506,7 @@
                     return (
                         <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
                             <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                                <IconLeaf className="text-amber-400" />
+                                <IconLeaf className="text-[#fbae23]" />
                                 Environmental Impact
                             </h2>
                             
@@ -517,14 +517,14 @@
                                         Years Quit
                                     </label>
                                     <div className="flex items-center gap-4">
-                                        <span className="text-3xl font-bold text-amber-400">{yearsQuit}</span>
+                                        <span className="text-3xl font-bold text-[#fbae23]">{yearsQuit}</span>
                                         <input 
                                             type="range" 
                                             min="1" 
                                             max="10" 
                                             value={yearsQuit} 
                                             onChange={(e) => setYearsQuit(Number(e.target.value))}
-                                            className="flex-1 h-2 rounded-lg appearance-none cursor-pointer text-amber-400"
+                                            className="flex-1 h-2 rounded-lg appearance-none cursor-pointer text-[#fbae23]"
                                         />
                                         <span className="text-sm opacity-60">{yearsQuit === 1 ? '1 year' : `${yearsQuit} years`}</span>
                                     </div>
@@ -538,37 +538,37 @@
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-4">
-                                    <div className="p-6 rounded-2xl border-2 border-amber-500/30 bg-amber-500/5">
+                                    <div className="p-6 rounded-2xl border-2 border-[#e9a01f]/30 bg-[#e9a01f]/5">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">🗑️</span>
-                                            <span className="text-3xl font-bold text-amber-400">{totalWaste} lbs</span>
+                                            <span className="text-3xl font-bold text-[#fbae23]">{totalWaste} lbs</span>
                                         </div>
                                         <p className="text-sm font-medium">Waste Prevented</p>
                                         <p className="text-xs opacity-60 mt-1">Plastic, batteries, and toxic materials over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
 
-                                    <div className="p-6 rounded-2xl border-2 border-amber-500/30 bg-amber-500/5">
+                                    <div className="p-6 rounded-2xl border-2 border-[#e9a01f]/30 bg-[#e9a01f]/5">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">🌲</span>
-                                            <span className="text-3xl font-bold text-amber-400">{totalTrees}</span>
+                                            <span className="text-3xl font-bold text-[#fbae23]">{totalTrees}</span>
                                         </div>
                                         <p className="text-sm font-medium">Trees Saved</p>
                                         <p className="text-xs opacity-60 mt-1">Equivalent in paper and manufacturing impact over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
 
-                                    <div className="p-6 rounded-2xl border-2 border-amber-500/30 bg-amber-500/5">
+                                    <div className="p-6 rounded-2xl border-2 border-[#e9a01f]/30 bg-[#e9a01f]/5">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-3xl">💧</span>
-                                            <span className="text-3xl font-bold text-amber-400">{totalWater} gal</span>
+                                            <span className="text-3xl font-bold text-[#fbae23]">{totalWater} gal</span>
                                         </div>
                                         <p className="text-sm font-medium">Water Conserved</p>
                                         <p className="text-xs opacity-60 mt-1">Manufacturing and agricultural water usage over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
                                 </div>
 
-                                <div className="p-4 rounded-xl text-center bg-amber-500/10">
+                                <div className="p-4 rounded-xl text-center bg-[#e9a01f]/10">
                                     <p className="text-sm opacity-80">
-                                        <span className="font-bold text-amber-400">Your impact matters!</span> {totalTrees} trees and {totalWater} gallons of water saved! 🌍
+                                        <span className="font-bold text-[#fbae23]">Your impact matters!</span> {totalTrees} trees and {totalWater} gallons of water saved! 🌍
                                     </p>
                                 </div>
                             </div>
@@ -613,7 +613,7 @@
                             <div>
                                 <div className="w-full h-2 bg-gray-200/20 rounded-full mb-4 overflow-hidden">
                                     <div 
-                                        className="h-full transition-all duration-1000 ease-out bg-amber-400" 
+                                        className="h-full transition-all duration-1000 ease-out bg-[#fbae23]" 
                                         style={{ width: `${progress}%` }}
                                     ></div>
                                 </div>
@@ -664,12 +664,12 @@
                                 </div>
 
                                 <p className="text-sm opacity-80 leading-relaxed">
-                                    My body deserves better. Recovery starts <span className="font-bold text-amber-400">immediately</span>.
+                                    My body deserves better. Recovery starts <span className="font-bold text-[#fbae23]">immediately</span>.
                                 </p>
                             </div>
 
-                            <div className="p-4 rounded-xl text-center bg-amber-500/20">
-                                <p className="text-sm font-bold text-amber-400">
+                            <div className="p-4 rounded-xl text-center bg-[#e9a01f]/20">
+                                <p className="text-sm font-bold text-[#fbae23]">
                                     Every day quit is a win for my health 💪
                                 </p>
                             </div>
@@ -703,14 +703,14 @@
                                 
                                 <h3 className="text-3xl font-bold mb-4 leading-tight">
                                     Quitting for<br/>
-                                    <span className="text-amber-400">the planet</span>
+                                    <span className="text-[#fbae23]">the planet</span>
                                 </h3>
 
                                 <div className="space-y-4 mb-6">
                                     <div className="p-4 rounded-lg bg-white/5">
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">🌲</span>
-                                            <span className="text-2xl font-bold text-amber-400">{(parseInt(envStats.trees) * yearsQuit)} trees</span>
+                                            <span className="text-2xl font-bold text-[#fbae23]">{(parseInt(envStats.trees) * yearsQuit)} trees</span>
                                         </div>
                                         <p className="text-xs opacity-70 mt-1">saved over {yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</p>
                                     </div>
@@ -718,7 +718,7 @@
                                     <div className="p-4 rounded-lg bg-white/5">
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">💧</span>
-                                            <span className="text-2xl font-bold text-amber-400">{(parseFloat(envStats.water) * yearsQuit).toFixed(0)} gal</span>
+                                            <span className="text-2xl font-bold text-[#fbae23]">{(parseFloat(envStats.water) * yearsQuit).toFixed(0)} gal</span>
                                         </div>
                                         <p className="text-xs opacity-70 mt-1">water conserved</p>
                                     </div>
@@ -726,15 +726,15 @@
                                     <div className="p-4 rounded-lg bg-white/5">
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl">🗑️</span>
-                                            <span className="text-2xl font-bold text-amber-400">{(parseFloat(envStats.waste) * yearsQuit).toFixed(1)} lbs</span>
+                                            <span className="text-2xl font-bold text-[#fbae23]">{(parseFloat(envStats.waste) * yearsQuit).toFixed(1)} lbs</span>
                                         </div>
                                         <p className="text-xs opacity-70 mt-1">waste prevented</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="p-4 rounded-xl text-center bg-amber-500/20">
-                                <p className="text-sm font-bold text-amber-400">
+                            <div className="p-4 rounded-xl text-center bg-[#e9a01f]/20">
+                                <p className="text-sm font-bold text-[#fbae23]">
                                     Making an impact that matters 🌱
                                 </p>
                             </div>
@@ -782,12 +782,12 @@
 
                     {/* Hero Section */}
                     <header className="max-w-4xl mx-auto text-center mt-12 px-4">
-                        <span className="inline-block py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-amber-500/30 text-amber-400">
+                        <span className="inline-block py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-[#e9a01f]/30 text-[#fbae23]">
                             {currentData.label}
                         </span>
                         <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
                             Your habit costs <br/>
-                            <span className="text-amber-400">more than you think.</span>
+                            <span className="text-[#fbae23]">more than you think.</span>
                         </h1>
                         <p className="text-xl opacity-80 max-w-2xl mx-auto mb-10">
                             {currentData.tagline}
@@ -801,7 +801,7 @@
                                     <button
                                         key={tab.id}
                                         onClick={() => setDimension(tab.id)}
-                                        className={`flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-medium transition-all ${dimension === tab.id ? 'bg-amber-400 text-black border-transparent shadow-lg transform scale-105' : 'border-gray-700 bg-transparent hover:border-gray-500 opacity-60'}`}
+                                        className={`flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-medium transition-all ${dimension === tab.id ? 'bg-[#fbae23] text-black border-transparent shadow-lg transform scale-105' : 'border-gray-700 bg-transparent hover:border-gray-500 opacity-60'}`}
                                     >
                                         <Icon className="w-5 h-5" />
                                         {tab.label}
@@ -851,7 +851,7 @@
                                         required
                                         value={formData.firstName}
                                         onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                                        className="px-4 py-2.5 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all border-white/20 focus:ring-amber-400 bg-white/10 text-white placeholder-white/50"
+                                        className="px-4 py-2.5 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all border-white/20 focus:ring-[#fbae23] bg-white/10 text-white placeholder-white/50"
                                     />
                                     <input
                                         type="text"
@@ -859,7 +859,7 @@
                                         required
                                         value={formData.lastName}
                                         onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                                        className="px-4 py-2.5 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all border-white/20 focus:ring-amber-400 bg-white/10 text-white placeholder-white/50"
+                                        className="px-4 py-2.5 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all border-white/20 focus:ring-[#fbae23] bg-white/10 text-white placeholder-white/50"
                                     />
                                 </div>
                                 <input
@@ -868,11 +868,11 @@
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                    className="w-full px-4 py-2.5 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all border-white/20 focus:ring-amber-400 bg-white/10 text-white placeholder-white/50"
+                                    className="w-full px-4 py-2.5 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all border-white/20 focus:ring-[#fbae23] bg-white/10 text-white placeholder-white/50"
                                 />
                                 <button 
                                     type="submit"
-                                    className="w-full inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl text-base font-bold transition-transform hover:scale-105 bg-amber-400 text-black hover:bg-amber-500"
+                                    className="w-full inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl text-base font-bold transition-transform hover:scale-105 bg-[#fbae23] text-black hover:bg-[#e9a01f]"
                                 >
                                     {formSubmitted ? '✓ Submitted!' : 'Get Free Support'}
                                     {!formSubmitted && <IconArrowRight className="w-5 h-5" />}
