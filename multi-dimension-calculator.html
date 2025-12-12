@@ -101,6 +101,23 @@
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
+
+        /* Rotating word animation */
+        .rotating-word {
+            display: inline-block;
+            animation: fadeSlide 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -240,6 +257,22 @@
             const [yearsQuit, setYearsQuit] = React.useState(1); // Years quit for Mind & Environment
             const [formData, setFormData] = React.useState({ firstName: '', lastName: '', email: '' });
             const [formSubmitted, setFormSubmitted] = React.useState(false);
+            const [rotatingWordIndex, setRotatingWordIndex] = React.useState(0);
+
+            // Rotating words based on dimension
+            const rotatingWords = {
+                money: ['think.', 'realize.', 'imagine.', 'believe.', 'expect.'],
+                mind: ['think.', 'know.', 'realize.', 'feel.', 'understand.'],
+                environment: ['think.', 'realize.', 'imagine.', 'see.', 'believe.']
+            };
+
+            // Rotate words every 2 seconds
+            React.useEffect(() => {
+                const interval = setInterval(() => {
+                    setRotatingWordIndex((prev) => (prev + 1) % rotatingWords[dimension].length);
+                }, 2000);
+                return () => clearInterval(interval);
+            }, [dimension]);
 
             // Handle form submission
             const handleFormSubmit = (e) => {
@@ -851,7 +884,9 @@
                         </span>
                         <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
                             Your habit costs <br/>
-                            <span className="text-[#fbae23]">more than you think.</span>
+                            <span className="text-[#fbae23]">
+                                more than you <span key={rotatingWordIndex} className="rotating-word">{rotatingWords[dimension][rotatingWordIndex]}</span>
+                            </span>
                         </h1>
                         <p className="text-xl opacity-80 max-w-2xl mx-auto mb-10">
                             {currentData.tagline}
