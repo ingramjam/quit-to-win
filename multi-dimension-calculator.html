@@ -302,6 +302,14 @@
                 return () => clearInterval(interval);
             }, [dimension]);
 
+            // Force video autoplay when age group changes
+            React.useEffect(() => {
+                const videos = document.querySelectorAll('.video-background');
+                videos.forEach(video => {
+                    video.play().catch(e => console.log('Autoplay prevented:', e));
+                });
+            }, [ageGroup]);
+
             // Handle form submission
             const handleFormSubmit = (e) => {
                 e.preventDefault();
@@ -891,6 +899,7 @@
                                 autoPlay
                                 loop
                                 playsInline
+                                onLoadedData={(e) => e.target.play()}
                                 onError={(e) => console.error('Video failed to load:', e)}
                             />
                         </div>
@@ -906,6 +915,7 @@
                                 autoPlay
                                 loop
                                 playsInline
+                                onLoadedData={(e) => e.target.play()}
                                 onError={(e) => console.error('Video failed to load:', e)}
                             />
                         </div>
