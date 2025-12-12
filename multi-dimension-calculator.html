@@ -33,7 +33,8 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            z-index: -1;
+            z-index: 0;
+            pointer-events: none;
         }
         
         .video-background {
@@ -43,7 +44,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.4;
+            opacity: 0.3;
+        }
+        
+        /* Ensure content is above video */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
         }
         
         /* Custom Animations */
@@ -884,10 +891,12 @@
                                 autoPlay
                                 loop
                                 playsInline
+                                onError={(e) => console.error('Video failed to load:', e)}
                             />
                         </div>
                     )}
                     
+                    <div className="content-wrapper">
                     {/* Navigation / Header */}
                     <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
                         <div className="flex items-center gap-2">
@@ -1022,6 +1031,7 @@
                             Disclaimer: Estimates only. Prices and data vary by state.
                         </p>
                     </footer>
+                    </div>
                 </div>
             );
         };
