@@ -263,6 +263,21 @@
             const monthlySavings = dailyCost * 30;
             const yearlySavings = dailyCost * 365;
             
+            // Dynamic item suggestions based on yearly savings
+            const getSuggestedItem = (savings) => {
+                if (savings < 500) return { name: "Streaming Subscriptions", emoji: "📺" };
+                if (savings < 1000) return { name: "AirPods Pro", emoji: "🎧" };
+                if (savings < 2000) return { name: "Latest Smartphone", emoji: "📱" };
+                if (savings < 3500) return { name: "Gaming Console + Games", emoji: "🎮" };
+                if (savings < 5000) return { name: "High-End Laptop", emoji: "💻" };
+                if (savings < 8000) return { name: "E-Bike", emoji: "🚴" };
+                if (savings < 12000) return { name: "Dream Vacation", emoji: "✈️" };
+                if (savings < 18000) return { name: "Used Car", emoji: "🚗" };
+                return { name: "Down Payment on a Home", emoji: "🏡" };
+            };
+            
+            const suggestedItem = getSuggestedItem(yearlySavings);
+            
             // For the progress bar/goal
             const goalPrice = currentProductData.price;
             const daysToGoal = Math.ceil(goalPrice / dailyCost);
@@ -398,11 +413,20 @@
                         </div>
                     );
                 } else if (dimension === 'mind') {
-                    // Calculate health improvements based on years quit
-                    const lungImprovement = Math.min(30 + (yearsQuit * 15), 95);
-                    const heartRisk = Math.max(50 - (yearsQuit * 10), 5);
-                    const brainClarity = Math.min(85 + (yearsQuit * 5), 100);
-                    const energyBoost = Math.min(40 + (yearsQuit * 12), 95);
+                    // Age-based starting health baselines (younger = better baseline)
+                    const ageBaselines = {
+                        "14-18": { lung: 40, heart: 35, brain: 75, energy: 55 }, // Young, better starting point
+                        "18-35": { lung: 30, heart: 45, brain: 65, energy: 45 }, // Mid baseline
+                        "35-65": { lung: 20, heart: 55, brain: 55, energy: 35 }  // Older, lower baseline
+                    };
+                    
+                    const baseline = ageBaselines[ageGroup];
+                    
+                    // Calculate health improvements based on years quit + age baseline
+                    const lungImprovement = Math.min(baseline.lung + (yearsQuit * 12), 95);
+                    const heartRisk = Math.max(baseline.heart - (yearsQuit * 8), 5);
+                    const brainClarity = Math.min(baseline.brain + (yearsQuit * 4), 100);
+                    const energyBoost = Math.min(baseline.energy + (yearsQuit * 10), 95);
                     
                     return (
                         <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
@@ -590,7 +614,7 @@
                                         <span className={`${textAccent} font-medium tracking-normal not-italic`}>California</span>
                                     </div>
                                     <span className="text-5xl animate-float">
-                                        {currentProductData.emoji}
+                                        {suggestedItem.emoji}
                                     </span>
                                 </div>
                                 
@@ -599,14 +623,12 @@
                                     <span className="opacity-50 strike-through decoration-2 line-through decoration-red-500">{PRODUCT_LABELS[product]}</span>
                                 </h3>
                                 <h3 className={`text-3xl font-bold mb-6 ${textAccent}`}>
-                                    for {currentProductData.item}
+                                    for {suggestedItem.name}
                                 </h3>
 
                                 <p className="text-sm opacity-80 leading-relaxed">
                                     By quitting now, I save <span className="font-bold border-b border-current">${Math.round(yearlySavings).toLocaleString()}</span> this year alone. 
-                                    {daysToGoal < 365 ? 
-                                        ` I can afford this goal in just ${daysToGoal} days.` : 
-                                        ` That's a huge step toward financial freedom.`}
+                                    In 10 years, that's <span className="font-bold border-b border-current">${Math.round(yearlySavings * 10).toLocaleString()}</span>!
                                 </p>
                             </div>
 
@@ -635,6 +657,18 @@
                         </div>
                     );
                 } else if (dimension === 'mind') {
+                    // Calculate health stats for postcard (using same age-based logic)
+                    const ageBaselines = {
+                        "14-18": { lung: 40, heart: 35, brain: 75, energy: 55 },
+                        "18-35": { lung: 30, heart: 45, brain: 65, energy: 45 },
+                        "35-65": { lung: 20, heart: 55, brain: 55, energy: 35 }
+                    };
+                    const baseline = ageBaselines[ageGroup];
+                    const lungImprovement = Math.min(baseline.lung + (yearsQuit * 12), 95);
+                    const heartRisk = Math.max(baseline.heart - (yearsQuit * 8), 5);
+                    const brainClarity = Math.min(baseline.brain + (yearsQuit * 4), 100);
+                    const energyBoost = Math.min(baseline.energy + (yearsQuit * 10), 95);
+                    
                     return (
                         <div id="postcard" className={`relative w-full max-w-md aspect-[4/5] rounded-3xl p-8 flex flex-col justify-between transition-all duration-500 ${cardClass} group`}>
                             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-10 rounded-bl-full ${textAccent}`}></div>
@@ -651,20 +685,27 @@
                                 </div>
                                 
                                 <h3 className="text-3xl font-bold mb-4 leading-tight">
-                                    Choosing <span className={textAccent}>health</span><br/>
-                                    over habit
+                                    After <span className={textAccent}>{yearsQuit} {yearsQuit === 1 ? 'year' : 'years'}</span><br/>
+                                    quit
                                 </h3>
 
                                 <div className="space-y-3 mb-6">
-                                    {currentData.health.facts.slice(0, 2).map((fact, idx) => (
-                                        <div key={idx} className="p-3 rounded-lg bg-white/5">
-                                            <p className="text-xs opacity-90">✓ {fact}</p>
-                                        </div>
-                                    ))}
+                                    <div className="p-3 rounded-lg bg-white/5">
+                                        <p className="text-xs opacity-90">🫁 Lung capacity: <span className="font-bold text-[#fbae23]">{lungImprovement.toFixed(0)}%</span></p>
+                                    </div>
+                                    <div className="p-3 rounded-lg bg-white/5">
+                                        <p className="text-xs opacity-90">❤️ Heart risk: <span className="font-bold text-[#fbae23]">-{heartRisk.toFixed(0)}%</span></p>
+                                    </div>
+                                    <div className="p-3 rounded-lg bg-white/5">
+                                        <p className="text-xs opacity-90">🧠 Mental clarity: <span className="font-bold text-[#fbae23]">{brainClarity.toFixed(0)}%</span></p>
+                                    </div>
+                                    <div className="p-3 rounded-lg bg-white/5">
+                                        <p className="text-xs opacity-90">💪 Energy boost: <span className="font-bold text-[#fbae23]">+{energyBoost.toFixed(0)}%</span></p>
+                                    </div>
                                 </div>
 
                                 <p className="text-sm opacity-80 leading-relaxed">
-                                    My body deserves better. Recovery starts <span className="font-bold text-[#fbae23]">immediately</span>.
+                                    My body is healing. Recovery continues <span className="font-bold text-[#fbae23]">every day</span>.
                                 </p>
                             </div>
 
