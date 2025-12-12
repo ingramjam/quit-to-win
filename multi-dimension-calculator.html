@@ -44,13 +44,37 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.3;
+            opacity: 0.15;
         }
         
         /* Ensure content is above video */
         .content-wrapper {
             position: relative;
             z-index: 1;
+        }
+        
+        /* Video toggle button */
+        .video-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(251, 174, 35, 0.3);
+            color: #fbae23;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .video-toggle-btn:hover {
+            background: rgba(251, 174, 35, 0.2);
+            border-color: #fbae23;
+            transform: scale(1.05);
         }
         
         /* Custom Animations */
@@ -283,6 +307,7 @@
             const [spend, setSpend] = React.useState(15); // Daily spend
             const [spendFreq, setSpendFreq] = React.useState("daily"); // daily, weekly
             const [yearsQuit, setYearsQuit] = React.useState(1); // Years quit for Mind & Environment
+            const [videoEnabled, setVideoEnabled] = React.useState(true); // Toggle for background video
             const [formData, setFormData] = React.useState({ firstName: '', lastName: '', email: '' });
             const [formSubmitted, setFormSubmitted] = React.useState(false);
             const [rotatingWordIndex, setRotatingWordIndex] = React.useState(0);
@@ -890,7 +915,7 @@
                 <div className="min-h-screen transition-colors duration-700 bg-slate-900 text-slate-200">
                     
                     {/* Video Background for 14-18 age group */}
-                    {ageGroup === "14-18" && (
+                    {ageGroup === "14-18" && videoEnabled && (
                         <div className="video-background-wrapper">
                             <video 
                                 className="video-background"
@@ -906,7 +931,7 @@
                     )}
                     
                     {/* Video Background for 18-35 age group */}
-                    {ageGroup === "18-35" && (
+                    {ageGroup === "18-35" && videoEnabled && (
                         <div className="video-background-wrapper">
                             <video 
                                 className="video-background"
@@ -922,7 +947,7 @@
                     )}
                     
                     {/* Video Background for 35-65 age group */}
-                    {ageGroup === "35-65" && (
+                    {ageGroup === "35-65" && videoEnabled && (
                         <div className="video-background-wrapper">
                             <video 
                                 className="video-background"
@@ -938,6 +963,16 @@
                                 onError={(e) => console.error('Video failed to load:', e)}
                             />
                         </div>
+                    )}
+                    
+                    {/* Video Toggle Button */}
+                    {(ageGroup === "14-18" || ageGroup === "18-35" || ageGroup === "35-65") && (
+                        <button 
+                            className="video-toggle-btn"
+                            onClick={() => setVideoEnabled(!videoEnabled)}
+                        >
+                            {videoEnabled ? '🎥 Hide Video' : '🎥 Show Video'}
+                        </button>
                     )}
                     
                     <div className="content-wrapper">
