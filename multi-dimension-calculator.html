@@ -921,6 +921,25 @@
                         </div>
                     )}
                     
+                    {/* Video Background for 35-65 age group */}
+                    {ageGroup === "35-65" && (
+                        <div className="video-background-wrapper">
+                            <video 
+                                className="video-background"
+                                src="https://raw.githubusercontent.com/ingramjam/quit-to-win/main/handling_stress_v1%20(720p).mp4#t=4"
+                                muted
+                                autoPlay
+                                loop
+                                playsInline
+                                onLoadedData={(e) => {
+                                    e.target.currentTime = 4;
+                                    e.target.play();
+                                }}
+                                onError={(e) => console.error('Video failed to load:', e)}
+                            />
+                        </div>
+                    )}
+                    
                     <div className="content-wrapper">
                     {/* Navigation / Header */}
                     <nav className="p-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
